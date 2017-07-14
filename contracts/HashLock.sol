@@ -22,6 +22,9 @@ contract hashlock {
     }
 
     function lock(bytes32 _hash, address _redeemer, uint _expires_in) payable {
+        if (msg.value <= 0){
+            revert();
+        }
         nextTradeId++;
         trades[nextTradeId].sender = msg.sender;
         trades[nextTradeId].redeemer = _redeemer;
@@ -32,7 +35,7 @@ contract hashlock {
         newHashlock(nextTradeId, _hash, trades[nextTradeId].redeemer);
     }
 
-      function unlock(uint _trade_id, string _preimage) public {
+    function unlock(uint _trade_id, string _preimage) public {
 
         if (sha256(_preimage) != trades[_trade_id].hash) {
             // can only withdraw if has correct preimage
@@ -44,7 +47,7 @@ contract hashlock {
         }
         trades[_trade_id].redeemer.transfer(trades[_trade_id].amount);
         unlockHash(_trade_id, _preimage);
-      }
+    }
 
       /* can only refund to msg sender, after timeout */
     function refund(uint _trade_id) {

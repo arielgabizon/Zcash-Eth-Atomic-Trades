@@ -1,0 +1,33 @@
+{
+  "name": "zcash-eth-atomic-trades",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "truffle-contract": "^2.0.1",
+    "web3": "^0.19.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielgabizon/Zcash-Eth-Atomic-Trades.git"
+  },
+  "contributors": [
+    {
+      "name": "Kersing Huang",
+      "email": "kersingh@gmail.com"
+    }
+  ],
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/arielgabizon/Zcash-Eth-Atomic-Trades/issues"
+  },
+  "homepage": "https://github.com/arielgabizon/Zcash-Eth-Atomic-Trades#readme"
+}
