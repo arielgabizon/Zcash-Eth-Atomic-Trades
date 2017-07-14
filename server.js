@@ -91,7 +91,7 @@ try{
 		/**
 		 * Creates a "hash lock contract" between Alice and Bob
 		 */
-		app.post('/api/swap/lock', function(req, res){
+		/*app.post('/api/swap/lock', function(req, res){
 			var hash = req.body.hash;
 			var redeemer = req.body.redeemer;
 			var sender = req.body.sender;
@@ -113,9 +113,9 @@ try{
 					error: err.toString()
 				});
 			});
-		});
+		});*/
 
-		app.post('/api/swap/unlock', function(req, res){
+		/*app.post('/api/swap/unlock', function(req, res){
 			var tradeId = req.body.tradeId;
 			var preimage = req.body.preimage;
 			var redeemer = req.body.redeemer;
@@ -132,7 +132,7 @@ try{
 					error: err.toString()
 				});
 			});
-		});
+		});*/
 
 		// pages 
 		app.get('/setup',function(req,res){
