@@ -5,6 +5,8 @@ contract hashlock {
     struct tradeData {
         address sender;
         address redeemer;
+        string senderZAddr;
+        string redeemerZAddr;
         bytes32 hash;
         uint amount;
         uint timeoutBlock;
@@ -21,7 +23,7 @@ contract hashlock {
         nextTradeId = 0;
     }
 
-    function lock(bytes32 _hash, address _redeemer, uint _expires_in) payable {
+    function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr) payable {
         
         if(msg.value <= 0){
             throw;
@@ -29,6 +31,8 @@ contract hashlock {
 
         nextTradeId++;
         trades[nextTradeId].sender = msg.sender;
+        trades[nextTradeId].senderZAddr = _sender_zaddr;
+        trades[nextTradeId].redeemerZAddr = _redeemer_zaddr;
         trades[nextTradeId].redeemer = _redeemer;
         trades[nextTradeId].hash = _hash;
         trades[nextTradeId].amount = msg.value;

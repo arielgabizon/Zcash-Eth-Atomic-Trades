@@ -34,8 +34,12 @@
             <div class="panel-body">
               <form class="form" role="">
                 <div class="form-group">
-                  <label>Sender</label>
-                  <input id="senderAccount" type="text" class="form-control" placeholder="0xd89c7501f10050d4757c324ecae7c99cb8a3cb92" />
+                  <label>Sender (Ethereum Address)</label>
+                  <input id="senderAccount" type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="form-group">
+                  <label>Sender (ZCash Address)</label>
+                  <input id="senderZAddr" type="text" class="form-control" placeholder="" />
                 </div>
                 <div class="form-group">
                   <label>Amount</label>
@@ -82,8 +86,12 @@
             <div class="panel-body">
               <form class="form">
                 <div class="form-group">
-                  <label>Redeemer</label>
-                  <input id="redeemerAccount" type="text" class="form-control" placeholder="0xd89c7501f10050d4757c324ecae7c99cb8a3cb92" />
+                  <label>Redeemer (Ethereum Address)</label>
+                  <input id="redeemerAccount" type="text" class="form-control" placeholder="" />
+                </div>
+                <div class="form-group">
+                  <label>Redeemer (ZCash Address)</label>
+                  <input id="redeemerZAddr" type="text" class="form-control" placeholder="" />
                 </div>
                 <a id="redeemerDetailsLink" data-toggle="collapse" href="#redeemerDetails" aria-expanded="false" aria-controls="redeemerDetails">View Details</a>
                 <div class="collapse" id="redeemerDetails">
