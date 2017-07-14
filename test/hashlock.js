@@ -34,7 +34,13 @@ contract('HashLock', function(accounts) {
 
         // check log was generated for trade
         assert.isArray(result.logs);
-        tradeId = result.logs[0].args.trade_id;
+        assert.isTrue(result.logs.length > 0);
+        assert.equal(result.logs[0].event, "newHashlock");
+        var entry = result.logs[0].args;
+        tradeId = entry.trade_id;
+        assert.equal(entry.hash, hash.toLowerCase());
+        assert.equal(entry.sender, sender);
+        assert.equal(entry.redeemer, redeemer);
 
         // check data was stored in trades mapping
         instance.trades.call(tradeId,{ from: sender }).then(function(tradedata){

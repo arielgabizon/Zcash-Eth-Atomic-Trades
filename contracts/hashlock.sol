@@ -12,7 +12,7 @@ contract hashlock {
       
     uint nextTradeId;
 
-    event newHashlock(uint trade_id, bytes32 hash, address redeemer);
+    event newHashlock(address sender, uint trade_id, bytes32 hash, address redeemer);
     event unlockHash(uint trade_id, string preimage);
 
     mapping (uint => tradeData) public trades;
@@ -22,9 +22,11 @@ contract hashlock {
     }
 
     function lock(bytes32 _hash, address _redeemer, uint _expires_in) payable {
-        if (msg.value <= 0){
-            revert();
+        
+        if(msg.value <= 0){
+            throw;
         }
+
         nextTradeId++;
         trades[nextTradeId].sender = msg.sender;
         trades[nextTradeId].redeemer = _redeemer;
@@ -32,18 +34,18 @@ contract hashlock {
         trades[nextTradeId].amount = msg.value;
         trades[nextTradeId].timeoutBlock = block.number + _expires_in;
         
-        newHashlock(nextTradeId, _hash, trades[nextTradeId].redeemer);
+        newHashlock(msg.sender, nextTradeId, _hash, trades[nextTradeId].redeemer);
     }
 
     function unlock(uint _trade_id, string _preimage) public {
 
         if (sha256(_preimage) != trades[_trade_id].hash) {
             // can only withdraw if has correct preimage
-            revert();
+            throw;
         }
         if (block.number >= trades[_trade_id].timeoutBlock ) {
             // can only withdraw before block timeout
-            revert();
+            throw;
         }
         trades[_trade_id].redeemer.transfer(trades[_trade_id].amount);
         unlockHash(_trade_id, _preimage);
@@ -54,7 +56,7 @@ contract hashlock {
 
         if (block.number < trades[_trade_id].timeoutBlock ) {
             // can only withdraw after block timeout
-            revert();
+            throw;
         }
         // if timeout has passed, refund initiator 
         trades[_trade_id].sender.transfer(trades[_trade_id].amount);
