@@ -7,6 +7,8 @@
     "test": "test"
   },
   "dependencies": {
+    "bitcore-lib-zcash": "git+https://github.com/str4d/bitcore-lib-zcash.git",
+    "bitcore-mnemonic": "git+https://github.com/arcalinea/bitcore-mnemonic.git",
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "express": "^4.15.3",
