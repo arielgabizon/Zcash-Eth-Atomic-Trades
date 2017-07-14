@@ -10,10 +10,13 @@ var app = express();
 var json = require("./build/contracts/hashlock.json");
 var HashLockContract = contract(json);
 
+// use ejs template engine
+app.set('view engine', 'ejs');
+
 // serve up static files from
-app.use(express.static('./node_modules'));
+app.use('/static',express.static('./node_modules'));
 // serve up static files from public
-app.use(express.static('./public'));
+app.use('/static',express.static('./public'));
 
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -129,6 +132,15 @@ try{
 					error: err.toString()
 				});
 			});
+		});
+
+		// pages 
+		app.get('/setup',function(req,res){
+			res.render('pages/setup');
+		});
+
+		app.get('/trade/:page',function(req,res){
+			res.render('pages/trade/' + req.params.page);
 		});
 
 		app.listen(3000,function(){
