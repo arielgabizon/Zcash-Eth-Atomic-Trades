@@ -40,6 +40,14 @@ HashLockContract.deployed().then(function(instance){
 		}})
 	});
 
+	app.post('/contract/unlock', function(req, res){
+		var tradeId = req.body.tradeId
+		var preimage = req.body.preimage
+		var redeemer = req.body.redeemer
+		// can the redeemer be just the address, or must be accessed through web3?
+		instance.unlock(tradeId, preimage, {from: redeemer})
+	})
+
 	app.listen(3000,function(){
 		console.log("http://localhost:3000");
 	});
