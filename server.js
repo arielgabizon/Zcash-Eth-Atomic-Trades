@@ -23,6 +23,16 @@ var provider = new Web3.providers.HttpProvider("http://localhost:8545");
 var web3 = new Web3(provider);
 HashLockContract.setProvider(provider);
 
+app.get('/setup', function(req, res){
+	res.send({
+		greeting: 'hello',
+	});
+})
+
+app.post('/setup', function(req, res){
+	console.log(req.body)
+})
+
 try{
 	HashLockContract.deployed().then(function(instance){
 
@@ -37,7 +47,7 @@ try{
 
 		/**
 		 * Generates a random UUID
-		 */ 
+		 */
 		app.get('/api/random', function(req, res){
 			res.send({
 				random: uuidv4()
@@ -46,7 +56,7 @@ try{
 
 		/**
 		 * Computes sha256 hash of data
-		 */ 
+		 */
 		app.post('/api/hash', function(req, res){
 			if(req.body['data']){
 				var hash = crypto.createHash('sha256');
@@ -72,8 +82,8 @@ try{
 			var amount = req.body.amount;
 			// how to handle gas?
 			instance.lock(hash, redeemer, expiry, {
-				from: sender, 
-				value: amount, 
+				from: sender,
+				value: amount,
 				gas: 1248090
 			}).then(function(result){
 				res.send({
