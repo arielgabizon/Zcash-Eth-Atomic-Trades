@@ -10,10 +10,13 @@ var app = express();
 var json = require("./build/contracts/hashlock.json");
 var HashLockContract = contract(json);
 
+// use ejs template engine
+app.set('view engine', 'ejs');
+
 // serve up static files from
-app.use(express.static('./node_modules'));
+app.use('/static',express.static('./node_modules'));
 // serve up static files from public
-app.use(express.static('./public'));
+app.use('/static',express.static('./public'));
 
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -72,18 +75,50 @@ try{
 		});
 
 		/**
+		 * Get Swap info
+		 */
+		app.get('/api/swap/get/:id', function(req, res){
+			
+			instance.trades(req.params.id).then(function(tradeData){
+				res.send({
+					id: req.params.id,
+					sender: tradeData[0],
+         			redeemer: tradeData[1],
+         			senderZAddr: tradeData[2],
+         			redeemerZAddr: tradeData[3],
+         			hash: tradeData[4],
+        			amount: tradeData[5],
+        			timeoutBlock: tradeData[6]
+				});
+			}).catch(function(err){
+				res.send({
+					error: err.toString()
+				});
+			});
+
+		});
+
+		/**
 		 * Creates a "hash lock contract" between Alice and Bob
 		 */
 		app.post('/api/swap/lock', function(req, res){
 			var hash = req.body.hash;
 			var redeemer = req.body.redeemer;
 			var sender = req.body.sender;
+			var senderZAddr = req.body.senderZAddr;
+			var redeemerZAddr = req.body.redeemerZAddr;
 			var expiry = req.body.expiry;
 			var amount = req.body.amount;
+<<<<<<< HEAD
 			// how to handle gas?
 			instance.lock(hash, redeemer, expiry, {
 				from: sender,
 				value: amount,
+=======
+			instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
+				from: sender, 
+				value: amount, 
+>>>>>>> ec73939fd1ab822c468deccfbb52a6cdfeb98e7d
 				gas: 1248090
 			}).then(function(result){
 				res.send({
@@ -114,6 +149,15 @@ try{
 					error: err.toString()
 				});
 			});
+		});
+
+		// pages 
+		app.get('/setup',function(req,res){
+			res.render('pages/setup');
+		});
+
+		app.get('/trade/:page',function(req,res){
+			res.render('pages/trade/' + req.params.page);
 		});
 
 		app.listen(3000,function(){

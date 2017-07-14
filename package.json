@@ -11,6 +11,7 @@
     "bitcore-mnemonic": "git+https://github.com/arcalinea/bitcore-mnemonic.git",
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
+    "ejs": "^2.5.6",
     "express": "^4.15.3",
     "request": "^2.81.0",
     "truffle-contract": "^2.0.1",

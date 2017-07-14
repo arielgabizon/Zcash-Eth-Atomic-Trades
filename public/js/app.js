@@ -62,6 +62,8 @@ $(function(){
 				data: {
 					sender: $("#senderAccount").val(),
 					redeemer: $("#redeemerAccount").val(),
+					senderZAddr: $("#senderZAddr").val(),
+					redeemerZAddr: $("#redeemerZAddr").val(),
 					hash: $("#hashRandomX").text(),
 					amount: $("#amount").val(),
 					expiry: $("#blocksToWait").val()

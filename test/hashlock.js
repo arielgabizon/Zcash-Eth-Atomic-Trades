@@ -7,14 +7,17 @@ contract('HashLock', function(accounts) {
   var sender = accounts[0], 
     redeemer = accounts[1],
     // sha256('cats')
-    hash = "0xD936608BAAACC6B762C14B0C356026FBA3B84E77D5B22E86F2FC29D3DA09C675";
+    hash = "0xD936608BAAACC6B762C14B0C356026FBA3B84E77D5B22E86F2FC29D3DA09C675",
+    z1 = 't3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2',
+    z2 = 't1Tqy2u2qgTdcVf7TRxC2KGrxwcuzfdgnSf';
 
   it("should not be able to create lock with zero ether", function() {
 
     return HashLock.deployed().then(function(instance) {
-      instance.lock(hash,redeemer,4,{
+      instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
-        value: 0
+        value: 0,
+        gas: 1248090
       }).then(function(result){
         assert.fail("should have reverted");
       }).catch(function(e){
@@ -32,7 +35,7 @@ contract('HashLock', function(accounts) {
       var startBalance = HashLock.web3.eth.getBalance(instance.address);
       assert.equal(startBalance.toNumber(),0);
       
-      return instance.lock(hash,redeemer,4,{
+      return instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
         gas: 1248090,
         value: 100
@@ -56,9 +59,11 @@ contract('HashLock', function(accounts) {
         return instance.trades.call(tradeId,{ from: sender }).then(function(tradedata){
           assert.equal(tradedata[0],sender);
           assert.equal(tradedata[1],redeemer);
-          assert.equal(tradedata[2],hash.toLowerCase());
-          assert.equal(tradedata[3],100);
-          assert.equal(tradedata[4].toNumber(),result.receipt.blockNumber+4);
+          assert.equal(tradedata[2],z1);
+          assert.equal(tradedata[3],z2);
+          assert.equal(tradedata[4],hash.toLowerCase());
+          assert.equal(tradedata[5],100);
+          assert.equal(tradedata[6].toNumber(),result.receipt.blockNumber+4);
         });
 
       });
@@ -71,7 +76,7 @@ contract('HashLock', function(accounts) {
     
     return HashLock.deployed()
       .then(function(instance){
-        return instance.lock(hash,redeemer,4,{
+        return instance.lock(hash,redeemer,4,z1,z2,{
           from: sender,
           gas: 1248090,
           value: 100
@@ -93,7 +98,7 @@ contract('HashLock', function(accounts) {
 
     return HashLock.deployed().then(function(instance){
 
-      return instance.lock(hash,redeemer,4,{
+      return instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
         gas: 1248090,
         value: 100
@@ -127,7 +132,7 @@ contract('HashLock', function(accounts) {
 
     return HashLock.deployed().then(function(instance){
     
-      return instance.lock(hash,redeemer,4,{
+      return instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
         gas: 1248090,
         value: 100
@@ -149,7 +154,7 @@ contract('HashLock', function(accounts) {
 
     return HashLock.deployed().then(function(instance){
     
-      return instance.lock(hash,redeemer,1,{
+      return instance.lock(hash,redeemer,1,z1,z2,{
         from: sender,
         gas: 1248090,
         value: 100
