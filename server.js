@@ -3,6 +3,7 @@ var express = require('express')
 var contract = require("truffle-contract");
 var Web3 = require('web3');
 var bodyParser = require('body-parser');
+var uuidv4 = require('uuid/v4');
 
 var app = express();
 
@@ -31,6 +32,15 @@ try{
 		app.get('/api/swap', function (req, res) {
 			res.send({
 				address: instance.address,
+			});
+		});
+
+		/**
+		 * Generates a random UUID
+		 */ 
+		app.get('/api/random', function(req, res){
+			res.send({
+				random: uuidv4()
 			});
 		});
 
@@ -66,13 +76,11 @@ try{
 				value: amount, 
 				gas: 1248090
 			}).then(function(result){
-				console.log(result);
 				res.send({
-					tradeId: 1,
+					tradeId: result.logs[0].args.trade_id,
 					tx: result.tx
 				});
 			}).catch(function(err){
-				console.log(err);
 				res.send({
 					error: err.toString()
 				});
@@ -89,7 +97,7 @@ try{
 				gas: 1248090
 			}).then(function(result){
 				res.send({
-					success: true
+					tx: result.tx
 				});
 			}).catch(function(err){
 				res.send({

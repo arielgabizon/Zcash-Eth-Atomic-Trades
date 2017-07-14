@@ -34,14 +34,6 @@
             <div class="panel-body">
               <form class="form" role="">
                 <div class="form-group">
-                  <label>X</label>
-                  <input id="randomX" type="text" class="form-control" placeholder="X" />
-                </div>
-                <div class="form-group">
-                  <label>H(X)</label>
-                  <pre id="hashRandomX"></pre>
-                </div>
-                <div class="form-group">
                   <label>Sender</label>
                   <input id="senderAccount" type="text" class="form-control" placeholder="0xd89c7501f10050d4757c324ecae7c99cb8a3cb92" />
                 </div>
@@ -54,18 +46,31 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>Expires</label>
-                  <div class="input-group">
-                    <input id="blocksToWait" type="number" class="form-control" min="1" placeholder="#" />
-                    <span class="input-group-addon">blocks later</span>
+                <a id="senderDetailsLink" data-toggle="collapse" href="#senderDetails" aria-expanded="false" aria-controls="senderDetails">View Details</a>
+                <div class="collapse" id="senderDetails">
+                  <div class="well">
+                    <div class="form-group">
+                      <label>X</label>
+                      <input id="randomX" type="text" class="form-control" placeholder="X" />
+                    </div>
+                    <div class="form-group">
+                      <label>H(X)</label>
+                      <pre id="hashRandomX"></pre>
+                    </div>
+                    <div class="form-group">
+                      <label>Expires</label>
+                      <div class="input-group">
+                        <input id="blocksToWait" type="number" class="form-control" min="1" placeholder="#" value="4" />
+                        <span class="input-group-addon">blocks later</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group text-center">
-                  <button type="button" class="btn btn-default" id="startBtn">Start</button>
+                  <button type="button" class="btn btn-default" id="lockBtn">Lock</button>
                 </div>
               </form>
-              <div id="startMessage"></div>
+              <div id="lockMessage"></div>
             </div>
           </div>
         </div>
@@ -80,6 +85,23 @@
                   <label>Redeemer</label>
                   <input id="redeemerAccount" type="text" class="form-control" placeholder="0xd89c7501f10050d4757c324ecae7c99cb8a3cb92" />
                 </div>
+                <a id="redeemerDetailsLink" data-toggle="collapse" href="#redeemerDetails" aria-expanded="false" aria-controls="redeemerDetails">View Details</a>
+                <div class="collapse" id="redeemerDetails">
+                  <div class="well">
+                    <div class="form-group">
+                      <label>Trade ID</label>
+                      <input id="tradeId" type="number" class="form-control" placeholder="" />
+                    </div>
+                    <div class="form-group">
+                      <label>Preimage</label>
+                      <input id="preimage" type="text" class="form-control" placeholder="" />
+                    </div>
+                  </div>
+                  <div class="form-group text-center">
+                    <button type="button" class="btn btn-default" id="unlockBtn">Unlock</button>
+                  </div>
+                </div>
+                <div id="unlockMessage"></div>
               </form>
             </div>
           </div>
