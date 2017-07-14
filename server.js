@@ -55,20 +55,41 @@ try{
 		 * Creates a "hash lock contract" between Alice and Bob
 		 */
 		app.post('/api/swap/lock', function(req, res){
-			var hash = req.body.hash
-			var redeemer = req.body.redeemer
-			var sender = req.body.sender
-			var expiry = req.body.expiry
-			var amount = req.body.amount
+			var hash = req.body.hash;
+			var redeemer = req.body.redeemer;
+			var sender = req.body.sender;
+			var expiry = req.body.expiry;
+			var amount = req.body.amount;
 			// how to handle gas?
 			instance.lock(hash, redeemer, expiry, {
 				from: sender, 
 				value: amount, 
 				gas: 1248090
 			}).then(function(result){
+				console.log(result);
 				res.send({
-					tradeId: result.logs[0].args.trade_id,
+					tradeId: 1,
 					tx: result.tx
+				});
+			}).catch(function(err){
+				console.log(err);
+				res.send({
+					error: err.toString()
+				});
+			});
+		});
+
+		app.post('/api/swap/unlock', function(req, res){
+			var tradeId = req.body.tradeId;
+			var preimage = req.body.preimage;
+			var redeemer = req.body.redeemer;
+			// can the redeemer be just the address, or must be accessed through web3?
+			instance.unlock(tradeId, preimage, {
+				from: redeemer,
+				gas: 1248090
+			}).then(function(result){
+				res.send({
+					success: true
 				});
 			}).catch(function(err){
 				res.send({

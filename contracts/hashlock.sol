@@ -40,11 +40,11 @@ contract hashlock {
     function unlock(uint _trade_id, string _preimage) public {
 
         if (sha256(_preimage) != trades[_trade_id].hash) {
-            // can only withdraw if has correct preimage
+            /* can only withdraw if has correct preimage */
             throw;
         }
         if (block.number >= trades[_trade_id].timeoutBlock ) {
-            // can only withdraw before block timeout
+            /* can only withdraw before block timeout */
             throw;
         }
         trades[_trade_id].redeemer.transfer(trades[_trade_id].amount);
@@ -55,12 +55,12 @@ contract hashlock {
     function refund(uint _trade_id) {
 
         if (block.number < trades[_trade_id].timeoutBlock ) {
-            // can only withdraw after block timeout
+            /* can only withdraw after block timeout */
             throw;
         }
-        // if timeout has passed, refund initiator 
+        /* if timeout has passed, refund initiator */
         trades[_trade_id].sender.transfer(trades[_trade_id].amount);
-        // delete the trades[msg.sender] from the mapping 
+        /* delete the trades[msg.sender] from the mapping */
         delete trades[_trade_id];
       }
 }
