@@ -26,11 +26,9 @@ var provider = new Web3.providers.HttpProvider("http://localhost:8545");
 var web3 = new Web3(provider);
 HashLockContract.setProvider(provider);
 
-app.get('/setup', function(req, res){
-	res.send({
-		greeting: 'hello',
-	});
-})
+app.get('/setup',function(req,res){
+	res.render('pages/setup');
+});
 
 app.post('/setup', function(req, res){
 	console.log(req.body)
@@ -78,7 +76,7 @@ try{
 		 * Get Swap info
 		 */
 		app.get('/api/swap/get/:id', function(req, res){
-			
+
 			instance.trades(req.params.id).then(function(tradeData){
 				res.send({
 					id: req.params.id,
@@ -109,16 +107,9 @@ try{
 			var redeemerZAddr = req.body.redeemerZAddr;
 			var expiry = req.body.expiry;
 			var amount = req.body.amount;
-<<<<<<< HEAD
-			// how to handle gas?
-			instance.lock(hash, redeemer, expiry, {
+			instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
 				from: sender,
 				value: amount,
-=======
-			instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
-				from: sender, 
-				value: amount, 
->>>>>>> ec73939fd1ab822c468deccfbb52a6cdfeb98e7d
 				gas: 1248090
 			}).then(function(result){
 				res.send({
@@ -151,10 +142,7 @@ try{
 			});
 		});
 
-		// pages 
-		app.get('/setup',function(req,res){
-			res.render('pages/setup');
-		});
+		// pages
 
 		app.get('/trade/:page',function(req,res){
 			res.render('pages/trade/' + req.params.page);
