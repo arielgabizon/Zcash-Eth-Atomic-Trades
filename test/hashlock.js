@@ -1,4 +1,6 @@
 var HashLock = artifacts.require("./HashLock.sol");
+var request = require('request');
+var uuidv4 = require('uuid/v4');
 
 contract('HashLock', function(accounts) {
 
@@ -143,24 +145,28 @@ contract('HashLock', function(accounts) {
     });
   });
 
-  it("should not be able to refund after block timeout",function(){
+  it("should be able to refund after block timeout",function(){
 
     return HashLock.deployed().then(function(instance){
     
-      return instance.lock(hash,redeemer,4,{
+      return instance.lock(hash,redeemer,1,{
         from: sender,
         gas: 1248090,
         value: 100
       }).then(function(result){
-        
-        // TODO: Advance blocks
-        var tradeId = result.logs[0].args.trade_id;
-        return instance.refund(tradeId).then(function(result2){
-          assert.isTrue(result.receipt.blockNumber-result2.receipt.blockNumber >= 4);
-        }).catch(function(err){
-          assert.fail("should not enter here");
-        });
 
+        request.post(HashLock.web3.currentProvider.provider.host,{
+          jsonrpc: "2.0",
+          method: "evm_mine"
+        }, function(err, httpResponse, body) {
+
+          var tradeId = result.logs[0].args.trade_id;
+          instance.refund(tradeId).then(function(result2){
+            assert.isTrue(result2.receipt.blockNumber-result.receipt.blockNumber >= 1);
+          }).catch(function(err){
+            assert.fail("should not enter here");
+          });
+        });
       });
 
     });
