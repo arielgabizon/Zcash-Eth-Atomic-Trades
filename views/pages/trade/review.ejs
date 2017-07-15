@@ -7,20 +7,27 @@
 </div>
 
 <div class="row">
-	<div class="col-md-offset-3 col-md-6">
+	<div class="col-md-8">
+		<% include ../../partials/trade %>
+	</div>
+	<div class="col-md-4">
 		<div class="panel panel-default">
 	        <div class="panel-heading">
-	          Bob
+	          Fund
 	        </div>
 	        <div class="panel-body">
-	        	<div class="text-center">
-		        	<form class="form" method="post" action="/api/zec/fund">
-						<p>
-							By funding <%= p2sh %> you agreeing to trade the amount of ZEC in <%= p2sh %> for <%= ethAmount %> wei of ETH.
-						</p>
+	        	<form class="form" method="post" action="/api/zec/fund">
+	        		<div class="form-group">
+	        			<label>Amount</label>
+	        			<input id="zecAmount" type="number" class="form-control" />
+	        		</div>
+					<p>
+						By funding <b><%= p2sh %></b> you are agreeing to this trade.
+					</p>
+					<center>
 						<button class="btn btn-default" type="submit">Agree</button>
-					</form>
-				</div>
+					</center>
+				</form>
 			</div>
 		</div>
 	</div>

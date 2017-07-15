@@ -29,7 +29,7 @@ $(function(){
                 $("#lockMessage")
                     .addClass("alert")
                     .addClass("alert-success")
-                    .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to Bob.');
+                    .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
             }
         
         });
@@ -70,18 +70,20 @@ $(function(){
 
                         var events = instance.allEvents();
 
-                        events.watch(function(err,log){
+                        events.get(function(err,log){
 
-                            // check transaction hash matches
-                            if(log.transactionHash == txHash){
-                                saveTx({
-                                    tx: txHash,
-                                    tradeId: log.args.trade_id
-                                });
+                            for(var i = log.length-1; i >= 0; i--){
+                                // check transaction hash matches
+                                var entry = log[i];
+                                if(entry.transactionHash == txHash){
+                                    saveTx({
+                                        tx: txHash,
+                                        tradeId: entry.args.trade_id
+                                    });
 
-                                events.stopWatching();
-
-                                createP2SH(log.args.trade_id, txHash);
+                                    createP2SH(entry.args.trade_id, txHash);
+                                    break;
+                                }
                             }
 
                         });
