@@ -32,18 +32,34 @@ try{
     HashLockContract.deployed().then(function(instance){
 
         /*****************************************************************
-         * API 
+         * API
          *****************************************************************/
 
         app.post('/setup', function(req, res){
             var pw = req.body.password
-            var generated = addrs.genPrivKey(pw, 'testnet')
+            var genpriv = addrs.genPrivKey(pw, 'testnet')
+						console.log("genpriv.privkey", typeof(genpriv.privkey))
+						// increment the num of keys generated
+						var rand = Math.floor(Math.random() * 200);
+						var genpub = addrs.newPubKey(genpriv.privkey, rand)
             // this is bad. get working on client side with browserify
             res.send({
-                code: generated.code,
-                privkey: generated.privkey
+                code: genpriv.code.toString(),
+                privkey: genpriv.privkey.toString(),
+								pubkey: genpub.pubkey.toString(),
+								address: genpub.address.toString()
             });
         });
+
+				app.post('/wallet', function(req, res){
+						var privkey = req.body.privkey;
+						console.log("privkey", privkey)
+						var rand = Math.floor(Math.random() * 200);
+						var genpub = addrs.newPubKey(privkey, rand)
+						res.send({
+								address: genpub.address.toString()
+						})
+				})
 
         /**
          * Generates a random UUID
@@ -143,13 +159,13 @@ try{
          * Creates a P2SH for Bob to fund
          */
         app.post('/api/zec/lock', function(req, res){
-            
+
             instance.trades(req.body.tradeId).then(function(tradeData){
-                
+
                 // TODO: implement me!
 
                 res.send({
-                    address: "<P2SH address>" 
+                    address: "<P2SH address>"
                 });
 
             }).catch(function(err){
@@ -206,7 +222,7 @@ try{
         });*/
 
         /*****************************************************************
-         * pages 
+         * pages
          *****************************************************************/
         app.get('/',function(req,res){
             res.render('pages/index');
@@ -216,12 +232,16 @@ try{
             res.render('pages/setup');
         });
 
+				app.get('/wallet', function(req, res){
+						res.render('pages/wallet');
+				})
+
         app.get('/trade/init',function(req,res){
-            res.render('pages/trade/init'); 
+            res.render('pages/trade/init');
         });
 
         app.get('/trade/settlement',function(req,res){
-            res.render('pages/trade/settlement'); 
+            res.render('pages/trade/settlement');
         });
 
         app.get('/trade/review',function(req,res){
@@ -229,10 +249,10 @@ try{
             if(req.query.tradeId){
                 instance.trades(req.query.tradeId).then(function(tradeData){
 
-                    res.render('pages/trade/review',{ 
+                    res.render('pages/trade/review',{
                         p2sh: req.query.p2sh,
                         ethAmount: tradeData[5]
-                    }); 
+                    });
 
                 }).catch(function(err){
                     res.send({
@@ -244,7 +264,7 @@ try{
                     error: "tradeId is required."
                 });
             }
-            
+
         });
 
         app.listen(3000,function(){
