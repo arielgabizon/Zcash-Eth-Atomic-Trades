@@ -65,7 +65,8 @@ $(function(){
 				$("#setupSuccessMessage")
 					.addClass("alert")
 					.addClass("alert-success")
-					.text("Successfully generated wallet. Write down this seed and put it in a safe place: " + data.code);
+					.text("Successfully generated wallet. Write down this seed and put it in a safe place: \n" + data.code + "\n" +
+				"\n Here is a new address you can send money to in order to fund a trade: " + data.address);
 			}
 		}).fail(function(err){
 			console.log("Fail")
