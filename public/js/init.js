@@ -1,5 +1,41 @@
 $(function(){
 
+    function saveTx(obj){
+        var data = localStorage.getItem("txs"), arr = [];
+        if(data){
+            arr = JSON.parse(data);
+        }
+        arr.push(obj);
+        localStorage.setItem("txs",JSON.stringify(arr));
+    }
+
+    function createP2SH(tradeId){
+
+        $.ajax({
+            method: 'POST',
+            url: '/api/zec/lock',
+            data: {
+                tradeId: tradeId.toString()
+            }
+        }).then(function(data,status,jqXHR){
+            
+            if(data.error){
+                $("#lockMessage")
+                    .addClass("alert")
+                    .addClass("alert-danger")
+                    .text(data.error);
+            }else{
+                var url = encodeURI('/trade/review?tradeId='+ tradeId+'&p2sh=' + data.address);
+                $("#lockMessage")
+                    .addClass("alert")
+                    .addClass("alert-success")
+                    .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to Bob.');
+            }
+        
+        });
+
+    }
+
     function onContractReady(instance){
 
         var submittingLock = false;
@@ -24,7 +60,7 @@ $(function(){
                     from: sender, 
                     value: amount, 
                     gas: 1248090
-                },function(err,result){
+                },function(err,txHash){
                     if(err){
                         $("#lockMessage")
                             .addClass("alert")
@@ -32,18 +68,22 @@ $(function(){
                             .text(err.toString());
                     }else{
 
-                        // TODO: listen for trade id
+                        var events = instance.allEvents();
 
-                        var events = instance.allEvents({
-                            topics: [sender]
-                        });
+                        events.watch(function(err,log){
 
-                        events.get(function(log){
-                            console.log(log);
-                            $("#lockMessage")
-                                .addClass("alert")
-                                .addClass("alert-success")
-                                .text("Successfully locked funds (tx: " + result + ")");
+                            // check transaction hash matches
+                            if(log.transactionHash == txHash){
+                                saveTx({
+                                    tx: txHash,
+                                    tradeId: log.args.trade_id
+                                });
+
+                                events.stopWatching();
+
+                                createP2SH(log.args.trade_id, txHash);
+                            }
+
                         });
                 
                     }
@@ -99,7 +139,7 @@ $(function(){
         url: '/api/swap'
     }).then(function(data,status,jqXHR){
 
-        var hashlockContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"trades","outputs":[{"name":"sender","type":"address"},{"name":"redeemer","type":"address"},{"name":"senderZAddr","type":"string"},{"name":"redeemerZAddr","type":"string"},{"name":"hash","type":"bytes32"},{"name":"amount","type":"uint256"},{"name":"timeoutBlock","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"}],"name":"refund","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_redeemer","type":"address"},{"name":"_expires_in","type":"uint256"},{"name":"_sender_zaddr","type":"string"},{"name":"_redeemer_zaddr","type":"string"}],"name":"lock","outputs":[],"payable":true,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"},{"name":"_preimage","type":"string"}],"name":"unlock","outputs":[],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"hash","type":"bytes32"},{"indexed":false,"name":"redeemer","type":"address"}],"name":"newHashlock","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"preimage","type":"string"}],"name":"unlockHash","type":"event"}]);
+        var hashlockContract = web3.eth.contract(data.abi);
 
         var instance = hashlockContract.at(data.address);
 
