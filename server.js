@@ -5,6 +5,8 @@ var Web3 = require('web3');
 var bodyParser = require('body-parser');
 var uuidv4 = require('uuid/v4');
 
+var addrs = require('./addrs');
+
 var app = express();
 
 var json = require("./build/contracts/hashlock.json");
@@ -31,7 +33,13 @@ app.get('/setup',function(req,res){
 });
 
 app.post('/setup', function(req, res){
-	console.log(req.body)
+	var pw = req.body.password
+	var generated = addrs.genPrivKey(pw, 'testnet')
+	// this is bad. get working on client side with browserify
+	res.send({
+		code: generated.code,
+		privkey: generated.privkey
+	});
 })
 
 try{

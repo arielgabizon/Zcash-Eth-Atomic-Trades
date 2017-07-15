@@ -36,7 +36,7 @@ $(function(){
 			$(this).text("Hide Details");
 		}else{
 			$(this).text("View Details");
-		}		
+		}
 	});
 
 	$("#redeemerDetailsLink").on('click',function(){
@@ -44,8 +44,33 @@ $(function(){
 			$(this).text("Hide Details");
 		}else{
 			$(this).text("View Details");
-		}		
+		}
 	});
+
+	$("#enterPassword").on('click', function(){
+		var pw = $("#password").val();
+		console.log("password", pw)
+		$.ajax({
+			method: 'POST',
+			url: hostname + '/setup',
+			data: {
+				password: pw
+			}
+		}).then(function(data,status,jqXHR){
+			if(data.error){
+				console.log("ERROR")
+			}else{
+				console.log("SUCCESS", data)
+				window.localStorage.setItem('privkey', data.privkey);
+				$("#setupSuccessMessage")
+					.addClass("alert")
+					.addClass("alert-success")
+					.text("Successfully generated wallet. Write down this seed and put it in a safe place: " + data.code);
+			}
+		}).fail(function(err){
+			console.log("Fail")
+		});
+	})
 
 	var submittingLock = false;
 	$("#lockBtn").on('click',function(){
