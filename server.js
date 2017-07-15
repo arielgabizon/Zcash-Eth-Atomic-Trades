@@ -39,6 +39,7 @@ try{
             var pw = req.body.password
             var genpriv = addrs.genPrivKey(pw, 'testnet')
 						console.log("genpriv.privkey", typeof(genpriv.privkey))
+						// increment the num of keys generated
 						var rand = Math.floor(Math.random() * 200);
 						var genpub = addrs.newPubKey(genpriv.privkey, rand)
             // this is bad. get working on client side with browserify
@@ -49,6 +50,16 @@ try{
 								address: genpub.address.toString()
             });
         });
+
+				app.post('/wallet', function(req, res){
+						var privkey = req.body.privkey;
+						console.log("privkey", privkey)
+						var rand = Math.floor(Math.random() * 200);
+						var genpub = addrs.newPubKey(privkey, rand)
+						res.send({
+								address: genpub.address.toString()
+						})
+				})
 
         /**
          * Generates a random UUID
@@ -220,6 +231,10 @@ try{
         app.get('/setup',function(req,res){
             res.render('pages/setup');
         });
+
+				app.get('/wallet', function(req, res){
+						res.render('pages/wallet');
+				})
 
         app.get('/trade/init',function(req,res){
             res.render('pages/trade/init');

@@ -73,6 +73,33 @@ $(function(){
 		});
 	})
 
+	$("#newAddress").on('click', function(){
+		var privkey = localStorage.getItem('privkey')
+		console.log('privkey', privkey)
+		$.ajax({
+			method: 'POST',
+			url: hostname + '/wallet',
+			// this is bad, don't send privkey to server. bad enough to have in localstorage.
+			// should move towards generating it on the fly
+			data: {
+				privkey: privkey
+			}
+		}).then(function(data,status,jqXHR){
+			if(data.error){
+				console.log("ERROR")
+			}else{
+				console.log("SUCCESS", data)
+				// window.localStorage.setItem('privkey', data.privkey);
+				$("#setupSuccessMessage")
+					.addClass("alert")
+					.addClass("alert-success")
+					.text("Successfully generated a new address! \n" + data.address);
+			}
+		}).fail(function(err){
+			console.log("Fail")
+		});
+	})
+
 	var submittingLock = false;
 	$("#lockBtn").on('click',function(){
 		$("#lockMessage")

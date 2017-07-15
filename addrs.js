@@ -20,7 +20,9 @@ function recoverPrivKey(code, password, network){
 // for per-trade public keys. Necessary?
 var tradeId = 3;
 function newPubKey(hdPrivateKey, tradeId){
-  // var hdPrivateKey = new zcore.HDPrivateKey(hdPrivateKey)
+  if(typeof(hdPrivateKey) === 'string'){
+    hdPrivateKey = new zcore.HDPrivateKey(hdPrivateKey)
+  }
   var derived = hdPrivateKey.derive(tradeId)
   var hdPublicKey = hdPrivateKey.hdPublicKey;
   var address = derived.privateKey.toAddress();
