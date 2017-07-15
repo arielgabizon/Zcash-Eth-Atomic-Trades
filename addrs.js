@@ -4,7 +4,9 @@ var Mnemonic = require('bitcore-mnemonic');
 var password = 'insecure pw'
 var network = 'testnet'
 
-function genPrivKey(password, network){
+'use strict';
+
+var genPrivKey = function(password, network){
   console.log("In genprivkey")
   var code = new Mnemonic(Mnemonic.Words.ENGLISH);
   var hdPrivateKey = code.toHDPrivateKey(password, network);
@@ -12,20 +14,20 @@ function genPrivKey(password, network){
   return {"code": code.toString(), "privkey": hdPrivateKey.toString()}
 }
 
-function recoverPrivKey(code, password, network){
+var recoverPrivKey = function(code, password, network){
   var hdPrivateKey = new Mnemonic(code).toHDPrivateKey(password, network);
   return hdPrivateKey
 }
 
 // for per-trade public keys. Necessary?
 var tradeId = 3;
-function newPubKey(hdPrivateKey, tradeId){
+var newPubKey = function(hdPrivateKey, tradeId){
   var derived = hdPrivateKey.derive(tradeId)
   var hdPublicKey = hdPrivateKey.hdPublicKey;
   var address = derived.privateKey.toAddress();
   return {"pubkey": hdPublicKey, "address": address}
 }
 
-module.exports.genPrivKey = genPrivKey;
-module.exports.recoverPrivKey = recoverPrivKey;
-module.exports.newPubKey = newPubKey;
+exports.genPrivKey = genPrivKey;
+exports.recoverPrivKey = recoverPrivKey;
+exports.newPubKey = newPubKey;

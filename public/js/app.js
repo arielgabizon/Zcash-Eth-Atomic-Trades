@@ -1,5 +1,7 @@
 $(function(){
 
+	// console.log("Testing browserify to gen password", code.toString())
+
 	var hostname = 'http://localhost:3000';
 
 	function updateHash(){
