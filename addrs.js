@@ -10,7 +10,7 @@ module.exports = {
     var hdPrivateKey = code.toHDPrivateKey(password, network);
     // do we want to store the hdPrivateKey in localstorage?
     return {
-      "code": code.toString(), 
+      "code": code.toString(),
       "privkey": hdPrivateKey.toString()
     };
   },
@@ -20,11 +20,14 @@ module.exports = {
   },
   // for per-trade public keys. Necessary?
   newPubKey: function(hdPrivateKey, tradeId){
-    var derived = hdPrivateKey.derive(tradeId);
+    if(typeof(hdPrivateKey) === 'string'){
+      hdPrivateKey = new zcore.HDPrivateKey(hdPrivateKey)
+    }
+    var derived = hdPrivateKey.derive(tradeId)
     var hdPublicKey = hdPrivateKey.hdPublicKey;
     var address = derived.privateKey.toAddress();
     return {
-      "pubkey": hdPublicKey, 
+      "pubkey": hdPublicKey,
       "address": address
     };
   }
