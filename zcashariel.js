@@ -3,20 +3,10 @@ var spawn = require("child_process").spawn;
 // takes Alice and Bob's Zcash addrs
 // Wrap the Zcash functions
 module.exports = Zcash_fund
-module.exports = Zcash_getaddr
 module.exports = Zcash_make_contract
 module.exports = Zcash_get_secret
 module.exports = Zcash_redeem
 module.exports = Zcash_refund
-
-function Zcash_getaddr(){
-  var str = 'bla'
-  var process = spawn('python',["ZBXCAT/eth.py", "0"]);
-  console.log('in fund')
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
-  });
-}
 
 function Zcash_make_contract(){
   var process = spawn('python',["ZBXCAT/eth.py", "1","contract.json"]);
@@ -61,4 +51,4 @@ function Zcash_refund(){
 
 Zcash_fund()
 // Zcash_redeem()
-// Zcash_redeem()  
+// Zcash_redeem()
