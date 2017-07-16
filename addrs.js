@@ -20,7 +20,10 @@ module.exports = {
     return hdPrivateKey
   },
   // for per-trade public keys. Necessary?
-    newPubKey: function(hdPrivateKey, tradeId){
+  newPubKey: function(hdPrivateKey, tradeId){
+    if(typeof(hdPrivateKey) === 'string'){
+      hdPrivateKey = new zcore.HDPrivateKey(hdPrivateKey)
+    }
     var derived = hdPrivateKey.derive(tradeId)
     var hdPublicKey = hdPrivateKey.hdPublicKey;
     var address = derived.privateKey.toAddress();
