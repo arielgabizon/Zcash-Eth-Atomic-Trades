@@ -60,5 +60,5 @@ function Zcash_refund(){
 
 
 Zcash_fund()
-// Zcash_getaddr()
+// Zcash_redeem()
 // Zcash_redeem()  
