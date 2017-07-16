@@ -3,22 +3,31 @@
 <div class="row">
 	<div class="col-md-offset-3 col-md-6">
   		<h1 align="center">Wallet</h1>
-  			<div class="panel panel-default">
-				<div class="panel-body">
-					<form class="form">
-						<div class="form-group">
-							<label>Get new address:</label>
-						</div>
-						<center>
-							<button type="button" class="btn btn-default" id="newAddress">Enter</button>
-						</center>
-					</form>
-					<p id="setupSuccessMessage"></p>
-				</div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form class="form">
+					<div class="form-group">
+                        <label>Network</label>
+                        <select id="network" class="form-control">
+                            <!--<option value="ETH">Ethereum</option>-->
+                            <option value="ZEC">Zcash</option>
+                        </select>
+                    </div>
+					<div class="form-group">
+                        <label>Password</label>
+                        <input id="password" type="password" class="form-control" placeholder="" />
+                    </div>
+					<center>
+						<button type="button" class="btn btn-primary" id="newAddressBtn">New Address</button>
+					</center>
+				</form>
 			</div>
+		</div>
+		<p id="newAddressMessage"></p>
 	</div>
 </div>
 
 <script src="static/js/bundle.js"></script>
+<script src="static/js/wallet.js"></script>
 
 <% include ../partials/footer %>

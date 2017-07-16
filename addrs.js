@@ -1,9 +1,11 @@
 var zcore = require('bitcore-lib-zcash');
 var Mnemonic = require('bitcore-mnemonic');
+var crypto = require('crypto');
 
 'use strict';
 
 module.exports = {
+
   genPrivKey: function(password, network){
     //console.log("In genprivkey")
     var code = new Mnemonic(Mnemonic.Words.ENGLISH);
@@ -30,5 +32,15 @@ module.exports = {
       "pubkey": hdPublicKey,
       "address": address
     };
+  },
+  encrypt: function(data,password){
+    var cipher = crypto.createCipher('aes256',password);
+    var encrypted = cipher.update(data,'utf-8','hex');
+    return encrypted + cipher.final('hex');
+  },
+  decrypt: function(ciphertext,password){
+    var decipher = crypto.createDecipher('aes256', password);
+    var decrypted = decipher.update(ciphertext,'hex','utf-8');
+    return decrypted + decipher.final('utf-8');
   }
 };

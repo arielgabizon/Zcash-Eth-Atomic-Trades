@@ -6,3 +6,14 @@ function getTrades(){
 	}
 	return trades;
 }
+
+function nextTradeId(){
+	var id = localStorage.getItem("nextTradeId");
+	if(!id){
+		id = 1;
+	}else{
+		id = parseInt(id);
+	}
+	localStorage.setItem("nextTradeId",id+1);
+	return id;
+}
