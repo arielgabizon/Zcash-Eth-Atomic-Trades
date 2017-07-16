@@ -8,8 +8,9 @@ module.exports = Zcash_get_secret
 module.exports = Zcash_redeem
 module.exports = Zcash_refund
 
+
 function Zcash_make_contract(){
-  var process = spawn('python',["ZBXCAT/eth.py", "1","contract.json"]);
+  var process = spawn('python',["eth.py", "make"]);
   console.log('in fund')
   process.stdout.on('data', function (data){
     console.log("data", data.toString())
@@ -17,7 +18,7 @@ function Zcash_make_contract(){
 }
 
 function Zcash_fund(){
-  var process = spawn('python',["ZBXCAT/eth.py", "2", "contract.json"]);
+  var process = spawn('python',["eth.py", "fund"]);
   console.log("in Zcash_fund js")
   process.stdout.on('data', function (data){
     console.log("data", data.toString())
@@ -25,7 +26,7 @@ function Zcash_fund(){
 }
 function Zcash_get_secret(){
   var str = 'bla'
-  var process = spawn('python',["ZBXCAT/eth.py", "3", "contract.json"]);
+  var process = spawn('python',["eth.py", "getsecret"]);
   console.log('in fund 3')
   process.stdout.on('data', function (data){
     console.log("data", data.toString())
@@ -33,7 +34,7 @@ function Zcash_get_secret(){
 }
 
 function Zcash_redeem(){
-  var process = spawn('python',["ZBXCAT/eth.py", "4","contract.json"]);
+  var process = spawn('python',["eth.py", "redeem"]);
   console.log('in redeem js')
   process.stdout.on('data', function (data){
     console.log("data", data.toString())
@@ -41,7 +42,7 @@ function Zcash_redeem(){
 }
 
 function Zcash_refund(){
-  var process = spawn('python',["ZBXCAT/eth.py", "5","contract.json"]);
+  var process = spawn('python',["ZBXCAT/eth.py", "refund"]);
   console.log('in fund')
   process.stdout.on('data', function (data){
     console.log("data", data.toString())
@@ -49,6 +50,8 @@ function Zcash_refund(){
 }
 
 
-Zcash_fund()
+// Zcash_make_contract()
+// Zcash_fund()
 // Zcash_redeem()
-// Zcash_redeem()
+Zcash_get_secret()
+//Zcash_refund()
