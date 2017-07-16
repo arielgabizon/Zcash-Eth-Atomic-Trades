@@ -59,7 +59,7 @@ def make_hashtimelockcontract(contract):
     redeemerAddr = CBitcoinAddress(contract['fulfiller'])
     blocknum = zcashd.getblockcount()
     print("Current blocknum", blocknum)
-    redeemblocknum = blocknum + 4 # int(contract['lock_increment'])
+    redeemblocknum = blocknum + int(contract['lock_increment'])
     #    print(contract['hash_of_secret'])
     #print(contract['hash_of_secret'].encode())
     # hash_of_secret = b'81f8009c3944a1951cf3297c7e54ae58a7300162a96dfe635ecdb6e9407bf41f' #contract['hash_of_secret'].encode()
@@ -86,6 +86,7 @@ def make_hashtimelockcontract(contract):
     
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
+    contract['p2sh']=p2sh
     return contract
 
 def fund_htlc(p2sh, amount):
