@@ -35,7 +35,7 @@ def Zcash_make_contract(contract):
 # finds seller's redeem tx and gets secret from it
 def Zcash_get_secret(contract):
     print("In Zcash_get_secret python")
-    secret = zXcat.find_secret(contract['p2sh'], b2x(lx(b2x(contract['fund_tx'].encode()))))
+    secret = zXcat.find_secret(contract['p2sh'], contract['fund_tx'])
     print("secret found is", secret)
     contract['secret'] = secret
     save_contract(contract)
@@ -68,6 +68,7 @@ if __name__ == '__main__':
         quit()
 # contract_file = sys.argv[2]
 # print(contract_file)
+print("before file open")
 with open('contract.json') as data_file:
     contract = json.load(data_file)
     if choice == "make":

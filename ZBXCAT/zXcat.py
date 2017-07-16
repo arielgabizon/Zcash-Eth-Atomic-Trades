@@ -124,28 +124,22 @@ def find_transaction_to_address(p2sh):
 #
 #     return fund_txinfo['details'][0]
 def find_secret(p2sh,vinid):
-    print("in find secret")
     zcashd.importaddress(p2sh, "", True)
     # is this working?
-    zcashd.listtransactions()
+    print("vinid:",vinid)
     txs = zcashd.listtransactions()
-    print("==========================================LISTTT============", len(txs))
+    # print("==========================================LISTTT============", txs)
     # print()
     # print('LENNNNNNN:', len(txs))
-    # print('LENNNNNNN2:', len(txs))
-    for i in range(0,len(txs)):
-        print("blabla", len(txs))
-        tx = txs[i]
-        
-        # print(tx)
+    print('LENNNNNNN2:', len(txs))
+    for tx in txs:
         # print("tx addr:", tx['address'], "tx id:", tx['txid'])
         # print(type(tx['address']))
         # print(type(p2sh))
         # print('type::',type(tx['txid']))
         raw = zcashd.gettransaction(lx(tx['txid']))['hex']
         decoded = zcashd.decoderawtransaction(raw)
-        print(decoded)
-        # print("fdsfdfds", decoded['vin'][0])
+        print("fdsfdfds", decoded['vin'][0])
         if('txid' in decoded['vin'][0]):
             sendid = decoded['vin'][0]['txid']
             print("sendid:", sendid)
@@ -153,11 +147,10 @@ def find_secret(p2sh,vinid):
             if (sendid == vinid ):
                 # print(type(tx['txid']))
                 # print(str.encode(tx['txid']))
-                print("Here")
+                print("in if")
                 return parse_secret(lx(tx['txid']))
     print("Redeem transaction with secret not found")
     return ""
-
 
 def parse_secret(txid):
     raw = zcashd.gettransaction(txid)['hex']
@@ -234,7 +227,7 @@ def auto_redeem(contract, secret):
         # print('Redeem txhex', b2x(tx.serialize()))
         VerifyScript(txin.scriptSig, txin_scriptPubKey, tx, 0, (SCRIPT_VERIFY_P2SH,))
         print("script verified, sending raw tx")
-        txid = bitcoind.sendrawtransaction(tx)
+        txid = zcashd.sendrawtransaction(tx)
         print("Txid of submitted redeem tx: ", b2x(lx(b2x(txid))))
         return  b2x(lx(b2x(txid)))
     else:
