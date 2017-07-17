@@ -12,7 +12,7 @@ $(function(){
     function onContractReady(instance){
 
         var submittingLock = false;
-        $("#lockBtn").on('click',function(){ 
+        $("#lockBtn").on('click',function(){
             $("#lockMessage")
                 .removeClass("alert")
                 .removeClass("alert-danger")
@@ -30,8 +30,8 @@ $(function(){
                 sender = $("#senderAccount").val();
 
                 instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
-                    from: sender, 
-                    value: amount, 
+                    from: sender,
+                    value: amount,
                     gas: 1248090
                 },function(err,txHash){
                     if(err){
@@ -64,12 +64,12 @@ $(function(){
                             }
 
                         });
-                
+
                     }
                     submittingLock = false;
                     $("#lockBtn").removeAttr("disabled");
                 });
-                
+
             }
         });
 
@@ -100,7 +100,26 @@ $(function(){
             $(this).text("Hide Details");
         }else{
             $(this).text("View Details");
-        }       
+        }
+    });
+
+    // default to metamask default account
+    $("#senderAccount").val(web3.eth.defaultAccount);
+
+    $("#newAddressBtn").on('click',function(){
+        $.ajax({
+            method: 'POST',
+            url: '/api/zec/address',
+            data: {
+                role: 'initiator'
+            }
+        }).then(function(data,status,jqXHR){
+            if(data.error){
+                console.log("ERROR:", data.error)
+            } else{
+                $("#senderZAddr").val(data['address']);
+            }
+        });
     });
 
     // prepopulate X with a random value
@@ -128,17 +147,6 @@ $(function(){
 
         // default to metamask default account
         $("#senderAccount").val(web3.eth.defaultAccount);
-
-        $.ajax({
-            method: 'POST',
-            url: '/api/zec/address'
-        }).then(function(data,status,jqXHR){
-
-            // TODO: 
-            $("#senderZAddr").val("t1LaNRuJUrzBo1CywdYviJgXwQFxcHx5PqX");
-            //$("#senderZAddr").val(data.address);
-
-        });
 
     });
 

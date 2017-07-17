@@ -167,23 +167,33 @@ try{
          * Gets funding transaction P2SH
          */
         app.post('/api/zec/tx', function(req, res){
+            var tradeId = req.body.tradeId
 
-            if(!req.body.tradeId){
+            if(!tradeId){
                 res.send({
                     error: 'tradeId is required'
                 });
             }
 
-            instance.trades(req.body.tradeId).then(function(tradeData){
+            instance.trades(tradeId).then(function(tradeData){
+                console.log("tradeData", tradeData)
+                // tradeData = ['0', '1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
                 // compute lock time as a function of ETH HashLock contract's timeout block
-                // var lockTime = tradeData[6];
-                var lockTime = 8;
-                tradeData = ['0', '1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
-                contractData = {
-                    initiator: tradeData[3],    // B
-                    fulfiller: tradeData[2],     // A
-                    "lock_increment": lockTime,
-                    secret: secret
+                // ~ 4 eth blocks per min. 10 eth blocks for every 1 zcash block
+                var ethBlocks = tradeData[6]
+                var zecBlocks = Math.ceil(ethBlocks / 20)
+
+                // senderZAddr: tradeData[2],
+                // redeemerZAddr: tradeData[3],
+                // hash: tradeData[4],
+                // amount: tradeData[5],
+                // timeoutBlock: tradeData[6]
+
+                var contractData = {
+                    initiator: tradeData[2],    // B
+                    fulfiller: tradeData[3],     // A
+                    timeLock: zecBLocks,
+                    hash: tradeData[4]
                   }
 
                 zcash.call('make', contractData)
@@ -269,17 +279,14 @@ try{
         })
 
         app.post('/api/zec/address', function(req, res){
-          // var data = {
-          //   role: req.body.role
-          // }
           var data = {
-            role: 'initiator'
+            role: req.body.role
           }
           zcash.call('getaddr', data)
             .then(function(contract){
                 console.log("Getting address", contract)
                 res.send({
-                  addr: contract[data['role']]
+                  address: contract[data['role']]
                 });
             }).catch(function(err){
                 res.send({

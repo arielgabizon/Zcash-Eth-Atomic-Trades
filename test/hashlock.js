@@ -4,12 +4,12 @@ var uuidv4 = require('uuid/v4');
 
 contract('HashLock', function(accounts) {
 
-  var sender = accounts[0], 
+  var sender = accounts[0],
     redeemer = accounts[1],
     // sha256('cats')
     hash = "0xD936608BAAACC6B762C14B0C356026FBA3B84E77D5B22E86F2FC29D3DA09C675",
-    z1 = 't3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2',
-    z2 = 't1Tqy2u2qgTdcVf7TRxC2KGrxwcuzfdgnSf';
+    z1 = 'tmPCLufHVCasYhu1uUfrTr9avJGxxWZz2dD',
+    z2 = 'tmCuQvGB3RiFBfwveQn5ZX5BbvCxtTh489Z';
 
   it("should not be able to create lock with zero ether", function() {
 
@@ -27,14 +27,14 @@ contract('HashLock', function(accounts) {
 
   });
 
-  
+
   it("should be able to create lock with nonzero ether", function() {
 
     return HashLock.deployed().then(function(instance) {
-        
+
       var startBalance = HashLock.web3.eth.getBalance(instance.address);
       assert.equal(startBalance.toNumber(),0);
-      
+
       return instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
         gas: 1248090,
@@ -73,7 +73,7 @@ contract('HashLock', function(accounts) {
   });
 
   it("should be not be able to unlock if provided wrong preimage", function() {
-    
+
     return HashLock.deployed()
       .then(function(instance){
         return instance.lock(hash,redeemer,4,z1,z2,{
@@ -93,7 +93,7 @@ contract('HashLock', function(accounts) {
       });
 
   });
-  
+
   it("should be able to unlock before block timeout", function() {
 
     return HashLock.deployed().then(function(instance){
@@ -107,7 +107,7 @@ contract('HashLock', function(accounts) {
         var tradeId = result.logs[0].args.trade_id;
         var startBalance = HashLock.web3.eth.getBalance(instance.address);
         var rStartBalance = HashLock.web3.eth.getBalance(redeemer);
-        
+
         return instance.unlock(tradeId,'cats').then(function(result){
 
           // contract pays out 100
@@ -131,13 +131,13 @@ contract('HashLock', function(accounts) {
   it("should not be able to refund before block timeout",function(){
 
     return HashLock.deployed().then(function(instance){
-    
+
       return instance.lock(hash,redeemer,4,z1,z2,{
         from: sender,
         gas: 1248090,
         value: 100
       }).then(function(result){
-        
+
         var tradeId = result.logs[0].args.trade_id;
         return instance.refund(tradeId).then(function(result2){
           assert.fail("should not enter here");
@@ -153,7 +153,7 @@ contract('HashLock', function(accounts) {
   it("should be able to refund after block timeout",function(){
 
     return HashLock.deployed().then(function(instance){
-    
+
       return instance.lock(hash,redeemer,1,z1,z2,{
         from: sender,
         gas: 1248090,
