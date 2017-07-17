@@ -1,2 +1,4 @@
 build/
 node_modules/
+venv/
+ZBXCAT/__pycache__

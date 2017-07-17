@@ -1,8 +1,9 @@
 import zXcat
-import bXcat
-from xcat import *
+# from xcat import *
 from zXcat import b2x,lx
-import utils
+from utils import *
+import sys, json
+from trades import *
 
 def Zcash_getaddr():
     print("test")
@@ -43,7 +44,7 @@ def Zcash_get_secret(contract):
 
 def Zcash_refund(contract):
     contractobj = Contract(contract)
-    refund_txid = zXcat.redeem_after_timelock(contractobj) 
+    refund_txid = zXcat.redeem_after_timelock(contractobj)
     print("refund txid is", refund_txid)
     contract['refund_txid'] = refund_txid
     save_contract(contract)
@@ -81,10 +82,10 @@ with open('contract.json') as data_file:
         Zcash_fund(contract)
     elif choice == "getsecret":
         print("HEREE")
-        Zcash_get_secret(contract) 
+        Zcash_get_secret(contract)
     elif choice == "redeem":
         Zcash_redeem(contract)
     elif choice  == "refund":
         Zcash_refund(contract)
     else:
-        print("invalid choice")    
+        print("invalid choice")

@@ -30,7 +30,7 @@ def get_trade():
         sellContract = trades.Contract(xcatdb['sell'])
         buyContract = trades.Contract(xcatdb['buy'])
         trade = trades.Trade(sellContract,buyContract)
-        
+
         # trade.sellContract.currency = xcatdb['sell']['currency']
         # trade.sellContract.amount = xcatdb['sell']['amount']
         # trade.sellContract.p2sh = xcatdb['sell']['p2sh']
@@ -40,7 +40,7 @@ def get_trade():
         # trade.buyContract.amount = xcatdb['buy']['amount']
         # trade.buyContract.p2sh = xcatdb['buy']['p2sh']
         # trade.buyContract.redeemscript = xcatdb['buy']['redeemscript']
-        
+
         # trade.buyContract = xcatdb['buy']
         return trade
     # except:
@@ -73,4 +73,3 @@ def save(trade):
 def save_contract(contract):
     with open('contract.json', 'w') as outfile:
         json.dump(contract, outfile)
-
