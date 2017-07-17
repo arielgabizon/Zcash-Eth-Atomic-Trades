@@ -262,6 +262,26 @@ try{
              });
         })
 
+        app.post('/api/zec/address', function(req, res){
+          // var data = {
+          //   role: req.body.role
+          // }
+          var data = {
+            role: 'initiator'
+          }
+          zcash.call('getaddr', data)
+            .then(function(contract){
+                console.log("Getting address", contract)
+                res.send({
+                  addr: contract[data['role']]
+                });
+            }).catch(function(err){
+                res.send({
+                    error: err.toString()
+                });
+            });
+        })
+
         /**
          * Creates a "hash lock ETH contract" between Alice and Bob
          */

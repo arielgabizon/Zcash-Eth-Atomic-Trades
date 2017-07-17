@@ -18,6 +18,7 @@ function spawn(cmds){
       output += data.toString();
     });
     p.on('close',function(code){
+      console.log(output)
       var contract = JSON.parse(fs.readFileSync(xcat_dir + 'contract.json', 'utf8'));
       resolve(contract);
     });

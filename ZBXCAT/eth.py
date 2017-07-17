@@ -5,10 +5,11 @@ from utils import *
 import sys, json
 from trades import *
 
-
-def Zcash_getaddr():
-    print("test")
-    return zXcat.zcashd.getnewaddress()
+def get_addr(contract, data):
+    role = data['role']
+    addr = zXcat.new_zcash_addr()
+    contract[role] = str(addr)
+    save_contract(contract)
 
 def Zcash_generate(i):
     zXcat.zcashd.generate(i)
@@ -67,25 +68,29 @@ def Zcash_redeem(contract, data):
 #print("in python")
 if __name__ == '__main__':
     choice = sys.argv[1]
-    print(choice)
+    print("Choice", choice)
     contract = get_contract()
     if sys.argv[2]:
         data = sys.argv[2]
+        data = json.loads(data)
+    print("Data in eth.py", data)
 
-if contract:
-    if choice == "make":
-        print("HERE at 1")
-        Zcash_make_contract(contract)
-        quit()
-    elif choice == "fund":
-        print("at 2")
-        Zcash_fund(contract)
-    elif choice == "getsecret":
-        print("HEREE")
-        Zcash_get_secret(contract)
-    elif choice == "redeem":
-        Zcash_redeem(contract, data)
-    elif choice  == "refund":
-        Zcash_refund(contract)
-    else:
-        print("invalid choice")
+    if contract:
+        if choice == "make":
+            print("HERE at 1")
+            Zcash_make_contract(contract)
+            quit()
+        elif choice == "fund":
+            print("at 2")
+            Zcash_fund(contract)
+        elif choice == "getsecret":
+            print("HEREE")
+            Zcash_get_secret(contract)
+        elif choice == "getaddr":
+            get_addr(contract, data)
+        elif choice == "redeem":
+            Zcash_redeem(contract, data)
+        elif choice  == "refund":
+            Zcash_refund(contract)
+        else:
+            print("invalid choice")
