@@ -26,7 +26,7 @@ $(function(){
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
-                senderZAddr = $("#senderZAddr").text(),
+                senderZAddr = $("#senderZAddr").val(),
                 sender = $("#senderAccount").val();
 
                 instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
@@ -91,16 +91,6 @@ $(function(){
         }
     }
 
-    function randomPreimage(){
-        $.ajax({
-            method: 'GET',
-            url: '/api/random'
-        }).then(function(data,status,jqXHR){
-            $("#randomX").val(data.random);
-            updateHash();
-        });
-    }
-
     $("#randomX").on('blur',updateHash);
     $("#randomX").on('change',updateHash);
 
@@ -113,20 +103,16 @@ $(function(){
         }       
     });
 
-    // default to metamask default account
-    $("#senderAccount").val(web3.eth.defaultAccount);
-
-    $("#newAddressBtn").on('click',function(){
-        var cipherText = localStorage.getItem("ZEC");
-        var hdPrivKey = keys.decrypt(cipherText,$("#password").val());
-        var tradeId = nextTradeId();
-        var info = keys.newPubKey(hdPrivKey,tradeId);
-        $("#senderZAddr").text(info.address.toString());
-    });
-
     // prepopulate X with a random value
-    $("#newPreimageBtn").on('click',randomPreimage);
-    randomPreimage();
+    $("#newPreimageBtn").on('click',function(){
+        $.ajax({
+            method: 'GET',
+            url: '/api/random'
+        }).then(function(data,status,jqXHR){
+            $("#randomX").val(data.random);
+            updateHash();
+        });
+    });
 
     // get address of hashlock contract
     $.ajax({
@@ -139,6 +125,20 @@ $(function(){
         var instance = hashlockContract.at(data.address);
 
         onContractReady(instance);
+
+        // default to metamask default account
+        $("#senderAccount").val(web3.eth.defaultAccount);
+
+        $.ajax({
+            method: 'POST',
+            url: '/api/zec/address'
+        }).then(function(data,status,jqXHR){
+
+            // TODO: 
+            $("#senderZAddr").val("t1LaNRuJUrzBo1CywdYviJgXwQFxcHx5PqX");
+            //$("#senderZAddr").val(data.address);
+
+        });
 
     });
 
