@@ -4,7 +4,7 @@ $(function(){
 	var tradeId = m[1];
 
 	$("#signBtn").on('click',function(){
-		
+
 		$("#fundSuccessMessage").addClass("hidden");
 		$("#txHash").text("");
 
@@ -51,11 +51,12 @@ $(function(){
 
 			}else{
 				for(var key in data){
+					console.log(data)
 					$("#"+key).text(data[key]);
 				}
 			}
 
-		});	
+		});
 
 	});
 

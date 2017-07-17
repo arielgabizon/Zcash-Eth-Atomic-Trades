@@ -173,7 +173,7 @@ try{
                 // compute lock time as a function of ETH HashLock contract's timeout block
                 // var lockTime = tradeData[6];
                 var lockTime = 8;
-                tradeData = ['1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
+                tradeData = ['0', '1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
                 contractData = {
                     initiator: tradeData[3],    // B
                     fulfiller: tradeData[2],     // A
