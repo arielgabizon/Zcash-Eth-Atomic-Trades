@@ -168,35 +168,27 @@ try{
             }
 
             instance.trades(req.body.tradeId).then(function(tradeData){
-
                 // compute lock time as a function of ETH HashLock contract's timeout block
-                var lockTime = tradeData[6];
-
-                // TODO: put the trade data in contract.json
-                // console.log(tradeData)
-                // zcash.Zcash_make_contract(function(contract) {
-                //   console.log("p2sh", contract['p2sh'])
-                //   res.send({
-                //     address: contract['p2sh']
-                //   });
-                // })
-
-                zcash.makeContract({
+                // var lockTime = tradeData[6];
+                var lockTime = 8;
+                tradeData = ['1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
+                contractData = {
                     initiator: tradeData[3],    // B
                     fulfiller: tradeData[2],     // A
                     "lock_increment": lockTime
-                }).then(function(){
-                    res.send({
-                        redeemblocknum: 3316,
-                        redeemScript: "63a820a24a7b3bd3c621a4ff5ad3c4b177c5d5f010f04e39f637447ef81d25a6c4aa428876a91403e22387ab1efd2b653cdb0a37da8df45bbe2db06702f40cb17576a9145a3224c6d199aee0ae005dea8d9057730ef2ea156888ac",
-                        p2sh: "t2GfZsDZo9siCRr4c5je9U2Db5aqiJrqv8V",
-                        rawTx: ""
-                    });
-                }).catch(function(err){
-                    res.send({
-                        error: err.toString()
-                    });
-                });
+                  }
+
+                zcash.call('make', contractData, function(contract) {
+                  console.log("Returning contract", contract)
+                  console.log("p2sh", contract['p2sh'])
+                  res.send({
+                    redeemblocknum: contract['redeemblocknum'],
+                    redeemScript: contract['redeemScript'],
+                    p2sh: contract['p2sh']
+                    // rawTx: rawTx
+                  });
+                })
+
             }).catch(function(err){
                 res.send({
                     error: err.toString()
