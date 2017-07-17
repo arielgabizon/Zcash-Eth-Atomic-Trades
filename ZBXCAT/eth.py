@@ -60,18 +60,20 @@ def Zcash_redeem(contract):
     save_contract(contract)
     return txid
 
-print("in python")
+#print("in python")
 if __name__ == '__main__':
     print("in python")
     choice = sys.argv[1]
+    print(choice)
     if choice == "0":
         Zcash_getaddr()
         quit()
-# contract_file = sys.argv[2]
+    json_input = sys.argv[2]
 # print(contract_file)
-print("before file open")
-with open('contract.json') as data_file:
-    contract = json.load(data_file)
+#print("before file open")
+#with open('contract.json') as data_file:
+    #contract = json.load(data_file)
+    contract = json.loads(json_input)
     if choice == "make":
         print("HERE at 1")
         print(contract)

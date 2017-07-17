@@ -1,57 +1,45 @@
-var spawn = require("child_process").spawn;
+var child_process = require("child_process");
+var Promise = require('promise');
 
 // takes Alice and Bob's Zcash addrs
 // Wrap the Zcash functions
-module.exports = Zcash_fund
-module.exports = Zcash_make_contract
-module.exports = Zcash_get_secret
-module.exports = Zcash_redeem
-module.exports = Zcash_refund
 
-
-function Zcash_make_contract(){
-  var process = spawn('python',["eth.py", "make"]);
-  console.log('in fund')
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
+function spawn(cmds){
+  var promise = new Promise(function (resolve, reject) {
+    var p = child_process.spawn('python3',cmds);
+    var output = "";
+    p.stderr.on('data',function(data){
+      reject(data.toString());
+    });
+    p.stdout.on('data',function(data){
+      output += data.toString();
+    });
+    p.on('close',function(code){
+      resolve(output);
+    });
   });
+  return promise;
 }
 
-function Zcash_fund(){
-  var process = spawn('python',["eth.py", "fund"]);
-  console.log("in Zcash_fund js")
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
-  });
-}
-function Zcash_get_secret(){
-  var str = 'bla'
-  var process = spawn('python',["eth.py", "getsecret"]);
-  console.log('in fund 3')
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
-  });
-}
-
-function Zcash_redeem(){
-  var process = spawn('python',["eth.py", "redeem"]);
-  console.log('in redeem js')
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
-  });
-}
-
-function Zcash_refund(){
-  var process = spawn('python',["ZBXCAT/eth.py", "refund"]);
-  console.log('in fund')
-  process.stdout.on('data', function (data){
-    console.log("data", data.toString())
-  });
-}
-
-
-// Zcash_make_contract()
-// Zcash_fund()
-// Zcash_redeem()
-Zcash_get_secret()
-//Zcash_refund()
+module.exports = {
+  makeContract: function(contract){
+    return spawn(["ZBXCAT/eth.py", "make", JSON.stringify(contract)]);
+    //return spawn(["ZBXCAT/test.py"]);
+  },
+  fundContract: function (contract){
+    return spawn(["ZBXCAT/eth.py", "fund", JSON.stringify(contract)]);
+    //return spawn(["ZBXCAT/test.py"]);
+  },
+  getSecret: function(contract){
+    return spawn(["ZBXCAT/eth.py", "getsecret", JSON.stringify(contract)]);
+    //return spawn(["ZBXCAT/test.py"]);
+  },
+  redeem: function(contract){
+    return spawn(["ZBXCAT/eth.py", "redeem", JSON.stringify(contract)]);
+    //return spawn(["ZBXCAT/test.py"]);
+  },
+  refund: function(contract){
+    return spawn(["ZBXCAT/eth.py", "refund", JSON.stringify(contract)]);
+    //return spawn(["ZBXCAT/test.py"]);
+  }
+};

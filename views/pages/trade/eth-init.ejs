@@ -18,9 +18,20 @@
               <label>Ethereum Address</label>
               <input id="senderAccount" type="text" class="form-control" placeholder="" />
             </div>
-            <div class="form-group">
-              <label>ZCash Address</label>
-              <input id="senderZAddr" type="text" class="form-control" placeholder="" />
+            <div class="well">
+              <div class="form-group">
+                <label>Password</label>
+                <div class="input-group">
+                  <input id="password" type="password" class="form-control" />
+                  <span class="input-group-btn">
+                    <button type="button" id="newAddressBtn" class="btn btn-default">New Address</button>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>ZCash Address</label>
+                <span id="senderZAddr" type="text" class="form-control" placeholder=""></span>
+              </div>
             </div>
           </form>
         </div>
@@ -53,7 +64,7 @@
       <div class="form-group">
         <label>Amount</label>
         <div class="input-group">
-          <input id="amount" type="text" class="form-control" placeholder="Amount" /> 
+          <input id="amount" type="text" class="form-control" placeholder="" /> 
           <div class="input-group-addon">
             wei
           </div>
@@ -64,7 +75,12 @@
           <div class="well">
             <div class="form-group">
               <label>X</label>
-              <input id="randomX" type="text" class="form-control" placeholder="X" />
+              <div class="input-group">
+                <input id="randomX" type="text" class="form-control" placeholder="" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" id="newPreimageBtn">Refresh</button>
+                </span>
+              </div>
             </div>
             <div class="form-group">
               <label>H(X)</label>
@@ -80,13 +96,13 @@
           </div>
         </div>
         <div class="form-group text-center">
-          <button type="button" class="btn btn-default" id="lockBtn">Lock</button>
+          <button type="button" class="btn btn-primary" id="lockBtn">Lock</button>
         </div>
         <div id="lockMessage"></div>
     </div>
   </div>
 
-  <script src="/static/js/init.js"></script>
+  <script src="/static/js/eth-init.js"></script>
   <script src="/static/js/bundle.js"></script>
 
 

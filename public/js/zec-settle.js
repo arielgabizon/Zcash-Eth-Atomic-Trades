@@ -1,5 +1,8 @@
 $(function(){
 
+    var m = window.location.search.match(/\??tradeId=(\d+)&?/);
+    var tradeId = m[1];
+
     function removeTrade(tradeId){
 
         var trades = getTrades();
@@ -11,9 +14,6 @@ $(function(){
             }
         }
         localStorage.setItem("txs",JSON.stringify(trades));
-
-        // remove option from UI
-        $("#tradeId option[value=" + tradeId + "]").remove();
     }
 
     function onContractReady(instance){
@@ -28,65 +28,11 @@ $(function(){
                 submittingUnlock = true;
                 $(this).attr("disabled","disabled");
 
-                var tradeId = $("#tradeId").val();
                 var preimage = $("#preimage").val();
 
-                instance.unlock(tradeId, preimage, {
-                    from: $("#redeemer").val(),
-                    gas: 1248090
-                },function(err,txHash){
-
-                    submittingUnlock = false;
-                    $("#unlockBtn").removeAttr("disabled");
-
-                    if(err){
-                        $("#unlockMessage")
-                            .addClass("alert")
-                            .addClass("alert-danger")
-                            .text(err.toString());
-                    }else{
-                        var events = instance.allEvents();
-
-                        events.get(function(err2,log){
-
-                            for(var i = log.length-1; i >= 0; i--){
-                                // check transaction hash matches
-                                var entry = log[i];
-                                if(entry.transactionHash == txHash){
-
-                                    removeTrade(tradeId);
-                                    
-                                    $("#unlockMessage")
-                                        .addClass("alert")
-                                        .addClass("alert-success")
-                                        .text("Successfully unlocked funds (tx: " + txHash + ")");
-                                    
-                                    break;
-                                }
-                            }
-
-                        });
-
-                    }
-                    
-                });
-
-            }
-        });
-    }
-
-    $("#tradeId").on('change',function(){
-        var trades = getTrades();
-        for(var i = 0; i < trades.length; i++){
-            var t = trades[i];
-            if(t.tradeId == $(this).val()){
-
-                $("#ethContractTx").text(t.tx);
-
-                // populate trade info
                 $.ajax({
-                    method: 'GET',
-                    url: '/api/swap/get/' + t.tradeId
+                    method: 'POST',
+                    url: '/api/swap/get/' + tradeId
                 }).then(function(data,status,jqXHR){
 
                     for(var key in data){
@@ -94,27 +40,22 @@ $(function(){
                     }
 
                 });
-                break;
+
             }
-        }
-    });
-
-    // toggle details link with appropriate text
-    $("#tradeDetailsLink").on('click',function(){
-        if($(this).text().indexOf("View") >= 0){
-            $(this).text("Hide Details");
-        }else{
-            $(this).text("View Details");
-        }       
-    });
-
-    // populate outstanding trades 
-    var trades = getTrades();
-    for(var i = 0; i < trades.length; i++){
-        var t = trades[i];
-        $("#tradeId").append('<option value="' + t.tradeId + '">' + t.tradeId + '</option>');
+        });
     }
-    $("#tradeId").trigger('change');
+
+    // get trade info from Ethereum contract
+    $.ajax({
+        method: 'GET',
+        url: '/api/swap/get/' + tradeId
+    }).then(function(data,status,jqXHR){
+
+        for(var key in data){
+            $("#"+key).text(data[key]);
+        }
+
+    });
 
     // get address of hashlock contract
     $.ajax({

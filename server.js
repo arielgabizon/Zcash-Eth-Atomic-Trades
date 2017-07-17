@@ -5,7 +5,8 @@ var Web3 = require('web3');
 var bodyParser = require('body-parser');
 var uuidv4 = require('uuid/v4');
 
-var addrs = require('./addrs');
+//var addrs = require('./addrs');
+var zcash = require('./ZBXCAT/zcash');
 
 var app = express();
 
@@ -35,7 +36,7 @@ try{
          * API
          *****************************************************************/
 
-        app.post('/setup', function(req, res){
+        /*app.post('/setup', function(req, res){
             var pw = req.body.password
             var genpriv = addrs.genPrivKey(pw, 'testnet')
 						console.log("genpriv.privkey", typeof(genpriv.privkey))
@@ -51,15 +52,15 @@ try{
             });
         });
 
-				app.post('/wallet', function(req, res){
-						var privkey = req.body.privkey;
-						console.log("privkey", privkey)
-						var rand = Math.floor(Math.random() * 200);
-						var genpub = addrs.newPubKey(privkey, rand)
-						res.send({
-								address: genpub.address.toString()
-						})
-				})
+		app.post('/wallet', function(req, res){
+				var privkey = req.body.privkey;
+				console.log("privkey", privkey)
+				var rand = Math.floor(Math.random() * 200);
+				var genpub = addrs.newPubKey(privkey, rand)
+				res.send({
+						address: genpub.address.toString()
+				});
+		});*/
 
         /**
          * Generates a random UUID
@@ -156,16 +157,39 @@ try{
         });
 
         /**
-         * Creates a P2SH for Bob to fund
+         * Gets funding transaction P2SH
          */
-        app.post('/api/zec/lock', function(req, res){
+        app.post('/api/zec/tx', function(req, res){
+
+            if(!req.body.tradeId){
+                res.send({
+                    error: 'tradeId is required'
+                });
+            }
 
             instance.trades(req.body.tradeId).then(function(tradeData){
 
-                // TODO: implement me!
+                // compute lock time as a function of ETH HashLock contract's timeout block
+                var lockTime = tradeData[6];
 
-                res.send({
-                    address: "<P2SH address>"
+                zcash.makeContract({
+                    initiator: tradeData[3],    // B
+                    fulfiller: tradeData[2],     // A
+                    "lock_increment": lockTime
+                }).then(function(){
+
+                    res.send({
+                        redeemblocknum: 3316,
+                        redeemScript: "63a820a24a7b3bd3c621a4ff5ad3c4b177c5d5f010f04e39f637447ef81d25a6c4aa428876a91403e22387ab1efd2b653cdb0a37da8df45bbe2db06702f40cb17576a9145a3224c6d199aee0ae005dea8d9057730ef2ea156888ac",
+                        p2sh: "t2GfZsDZo9siCRr4c5je9U2Db5aqiJrqv8V",
+                        rawTx: ""
+                    });
+                }).catch(function(err){
+
+                    res.send({
+                        error: err.toString()
+                    });
+
                 });
 
             }).catch(function(err){
@@ -173,6 +197,28 @@ try{
                     error: err.toString()
                 });
             });
+        });
+
+        /**
+         * Submits Bob's funding transaction
+         */
+        app.post('/api/zec/tx/fund', function(req, res){
+
+            zcash.fundContract(req.body.p2sh,req.body.amount)
+                .then(function(){
+
+                    res.send({
+                        tx: "7f2ba25859d6c978636e50dd451b41d7b6e0e6019d7a925fba04ac772c5399aa"
+                    });
+                    
+                }).catch(function(err){
+
+                    res.send({
+                        error: err.toString()
+                    });
+                    
+                });;
+
         });
 
         /**
@@ -228,43 +274,24 @@ try{
             res.render('pages/index');
         });
 
-        app.get('/setup',function(req,res){
-            res.render('pages/setup');
+		app.get('/wallet', function(req, res){
+			res.render('pages/wallet');
+		});
+
+        app.get('/trade/eth/init',function(req,res){
+            res.render('pages/trade/eth-init');
         });
 
-				app.get('/wallet', function(req, res){
-						res.render('pages/wallet');
-				})
-
-        app.get('/trade/init',function(req,res){
-            res.render('pages/trade/init');
+        app.get('/trade/zec/init',function(req,res){
+            res.render('pages/trade/zec-init');
         });
 
-        app.get('/trade/settlement',function(req,res){
-            res.render('pages/trade/settlement');
+        app.get('/trade/zec/settle',function(req,res){
+            res.render('pages/trade/zec-settle');
         });
 
-        app.get('/trade/review',function(req,res){
-
-            if(req.query.tradeId){
-                instance.trades(req.query.tradeId).then(function(tradeData){
-
-                    res.render('pages/trade/review',{
-                        p2sh: req.query.p2sh,
-                        ethAmount: tradeData[5]
-                    });
-
-                }).catch(function(err){
-                    res.send({
-                        error: err.toString()
-                    });
-                });
-            }else{
-                res.send({
-                    error: "tradeId is required."
-                });
-            }
-
+        app.get('/trade/eth/settle',function(req,res){
+            res.render('pages/trade/eth-settle');
         });
 
         app.listen(3000,function(){

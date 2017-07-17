@@ -9,33 +9,6 @@ $(function(){
         localStorage.setItem("txs",JSON.stringify(arr));
     }
 
-    function createP2SH(tradeId){
-
-        $.ajax({
-            method: 'POST',
-            url: '/api/zec/lock',
-            data: {
-                tradeId: tradeId.toString()
-            }
-        }).then(function(data,status,jqXHR){
-            
-            if(data.error){
-                $("#lockMessage")
-                    .addClass("alert")
-                    .addClass("alert-danger")
-                    .text(data.error);
-            }else{
-                var url = encodeURI('/trade/review?tradeId='+ tradeId+'&p2sh=' + data.address);
-                $("#lockMessage")
-                    .addClass("alert")
-                    .addClass("alert-success")
-                    .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
-            }
-        
-        });
-
-    }
-
     function onContractReady(instance){
 
         var submittingLock = false;
@@ -53,7 +26,7 @@ $(function(){
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
-                senderZAddr = $("#senderZAddr").val(),
+                senderZAddr = $("#senderZAddr").text(),
                 sender = $("#senderAccount").val();
 
                 instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
@@ -74,14 +47,18 @@ $(function(){
 
                             for(var i = log.length-1; i >= 0; i--){
                                 // check transaction hash matches
-                                var entry = log[i];
+                                var entry = log[i], tradeId = entry.args.trade_id;
                                 if(entry.transactionHash == txHash){
                                     saveTx({
                                         tx: txHash,
-                                        tradeId: entry.args.trade_id
+                                        tradeId: tradeId
                                     });
 
-                                    createP2SH(entry.args.trade_id, txHash);
+                                    var url = encodeURI('/trade/zec/init?tradeId='+ tradeId);
+                                    $("#lockMessage")
+                                        .addClass("alert")
+                                        .addClass("alert-success")
+                                        .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
                                     break;
                                 }
                             }
@@ -114,6 +91,16 @@ $(function(){
         }
     }
 
+    function randomPreimage(){
+        $.ajax({
+            method: 'GET',
+            url: '/api/random'
+        }).then(function(data,status,jqXHR){
+            $("#randomX").val(data.random);
+            updateHash();
+        });
+    }
+
     $("#randomX").on('blur',updateHash);
     $("#randomX").on('change',updateHash);
 
@@ -129,17 +116,17 @@ $(function(){
     // default to metamask default account
     $("#senderAccount").val(web3.eth.defaultAccount);
 
-    // generate zcash address
-    //var zecPubKey = keys.newPubKey(hdPrivateKey,id);
+    $("#newAddressBtn").on('click',function(){
+        var cipherText = localStorage.getItem("ZEC");
+        var hdPrivKey = keys.decrypt(cipherText,$("#password").val());
+        var tradeId = nextTradeId();
+        var info = keys.newPubKey(hdPrivKey,tradeId);
+        $("#senderZAddr").text(info.address.toString());
+    });
 
     // prepopulate X with a random value
-    $.ajax({
-        method: 'GET',
-        url: '/api/random'
-    }).then(function(data,status,jqXHR){
-        $("#randomX").val(data.random);
-        updateHash();
-    });
+    $("#newPreimageBtn").on('click',randomPreimage);
+    randomPreimage();
 
     // get address of hashlock contract
     $.ajax({
