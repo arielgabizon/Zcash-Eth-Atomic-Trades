@@ -62,13 +62,15 @@ try{
 				});
 		});*/
 
+
         /**
          * Generates a random UUID
          */
         app.get('/api/random', function(req, res){
-            res.send({
-                random: uuidv4()
-            });
+
+            // res.send({
+            //     random: uuidv4()
+            // });
         });
 
         /**
@@ -178,16 +180,21 @@ try{
                     "lock_increment": lockTime
                   }
 
-                zcash.call('make', contractData, function(contract) {
-                  console.log("Returning contract", contract)
-                  console.log("p2sh", contract['p2sh'])
-                  res.send({
-                    redeemblocknum: contract['redeemblocknum'],
-                    redeemScript: contract['redeemScript'],
-                    p2sh: contract['p2sh']
-                    // rawTx: rawTx
-                  });
-                })
+                zcash.call('make', contractData)
+                  .then(function(contract){
+                    console.log("Response from make func:", contract)
+                    console.log("p2sh", contract['p2sh'])
+                    res.send({
+                      redeemblocknum: contract['redeemblocknum'],
+                      redeemScript: contract['redeemScript'],
+                      p2sh: contract['p2sh']
+                      // rawTx: rawTx
+                    });
+                  }).catch(function(err){
+                      res.send({
+                          error: err.toString()
+                      });
+                  });;
 
             }).catch(function(err){
                 res.send({
@@ -200,23 +207,60 @@ try{
          * Submits Bob's funding transaction
          */
         app.post('/api/zec/tx/fund', function(req, res){
+            var data = {
+              p2sh: req.body.p2sh,
+              amt: req.body.amount
+            }
 
-            zcash.fundContract(req.body.p2sh,req.body.amount)
-                .then(function(){
-
+            zcash.call('fund', data)
+                .then(function(contract){
+                   console.log("Contract returning from call", contract)
+                   console.log("Fund txid returning from call", contract['fund_tx'])
                     res.send({
-                        tx: "7f2ba25859d6c978636e50dd451b41d7b6e0e6019d7a925fba04ac772c5399aa"
+                        tx: contract['fund_tx']
                     });
-
                 }).catch(function(err){
-
                     res.send({
                         error: err.toString()
                     });
-
                 });;
-
         });
+
+        /**
+         * Submits Alice's redeem transaction
+         */
+        app.post('/api/zec/tx/redeem', function(req, res){
+          zcash.call('redeem', secret)
+              .then(function(contract){
+                 console.log("Contract returning from redeem call", contract)
+                 console.log("Redeem txid returning from call", contract['redeem_tx'])
+                  res.send({
+                      tx: contract['redeem_tx']
+                  });
+              }).catch(function(err){
+                  res.send({
+                      error: err.toString()
+                  });
+              });;
+        });
+
+        /**
+         * Submits Bob's refund transaction
+         */
+        app.post('/api/zec/tx/refund', function(req, res){
+          zcash.call('refund')
+            .then(function(contract){
+                console.log("Contract returning from refund call", contract)
+                console.log("Redeem txid returning from call", contract['refund_tx'])
+                 res.send({
+                     tx: contract['refund_tx']
+                 });
+             }).catch(function(err){
+                 res.send({
+                     error: err.toString()
+                 });
+             });
+        })
 
         /**
          * Creates a "hash lock ETH contract" between Alice and Bob

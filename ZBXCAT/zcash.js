@@ -18,35 +18,19 @@ function spawn(cmds){
       output += data.toString();
     });
     p.on('close',function(code){
-      resolve(output);
+      var contract = JSON.parse(fs.readFileSync(xcat_dir + 'contract.json', 'utf8'));
+      resolve(contract);
     });
-  });
+  })
   return promise;
 }
 
-function call(arg, contract, callback){
-  spawn(["ZBXCAT/eth.py", arg, JSON.stringify(contract)]);
-  var contract = JSON.parse(fs.readFileSync(xcat_dir + 'contract.json', 'utf8'));
-  return callback(contract);
+
+function call(arg, data){
+  console.log("Data in zcash call", data)
+  return spawn(["ZBXCAT/eth.py", arg, JSON.stringify(data)])
 }
 
 module.exports.call = call
 
-//
-// module.exports = {
-//   makeContract: function(contract){
-//     spawn(["ZBXCAT/eth.py", "make", JSON.stringify(contract)]);
-//   },
-//   fundContract: function (contract){
-//     return spawn(["ZBXCAT/eth.py", "fund", JSON.stringify(contract)]);
-//   },
-//   getSecret: function(contract){
-//     return spawn(["ZBXCAT/eth.py", "getsecret", JSON.stringify(contract)]);
-//   },
-//   redeem: function(contract){
-//     return spawn(["ZBXCAT/eth.py", "redeem", JSON.stringify(contract)]);
-//   },
-//   refund: function(contract){
-//     return spawn(["ZBXCAT/eth.py", "refund", JSON.stringify(contract)]);
-//   }
-// };
+// getsecret method?

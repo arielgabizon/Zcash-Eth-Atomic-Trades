@@ -53,12 +53,14 @@ def Zcash_refund(contract):
     return refund_txid
 
 # returns txid of redeem transaction with secret
-def Zcash_redeem(contract):
+def Zcash_redeem(contract, data):
     print("in redeem")
     contractobj = Contract(contract)
-    print(contract['secret'])
-    txid = zXcat.redeem_with_secret(contractobj,get_secret())
-    contract['redeem_id'] = txid
+    # does the seller enter a secret?
+    # print("User entered secret", data)
+    # print(contract['secret'])
+    txid = zXcat.redeem_with_secret(contractobj, get_secret())
+    contract['redeem_tx'] = txid
     save_contract(contract)
     return txid
 
@@ -67,12 +69,12 @@ if __name__ == '__main__':
     choice = sys.argv[1]
     print(choice)
     contract = get_contract()
+    if sys.argv[2]:
+        data = sys.argv[2]
 
 if contract:
-    # json_input = sys.argv[2]
     if choice == "make":
         print("HERE at 1")
-        # print(contract)
         Zcash_make_contract(contract)
         quit()
     elif choice == "fund":
@@ -82,7 +84,7 @@ if contract:
         print("HEREE")
         Zcash_get_secret(contract)
     elif choice == "redeem":
-        Zcash_redeem(contract)
+        Zcash_redeem(contract, data)
     elif choice  == "refund":
         Zcash_refund(contract)
     else:
