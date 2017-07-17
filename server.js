@@ -67,10 +67,9 @@ try{
          * Generates a random UUID
          */
         app.get('/api/random', function(req, res){
-
-            // res.send({
-            //     random: uuidv4()
-            // });
+            res.send({
+                random: uuidv4()
+            });
         });
 
         /**
@@ -177,7 +176,8 @@ try{
                 contractData = {
                     initiator: tradeData[3],    // B
                     fulfiller: tradeData[2],     // A
-                    "lock_increment": lockTime
+                    "lock_increment": lockTime,
+                    secret: secret
                   }
 
                 zcash.call('make', contractData)
