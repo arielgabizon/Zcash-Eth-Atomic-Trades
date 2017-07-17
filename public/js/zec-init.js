@@ -48,7 +48,7 @@ $(function(){
 		}).then(function(data,status,jqXHR){
 
 			if(data.error){
-
+				console.log("ERROR:", data.error)
 			}else{
 				for(var key in data){
 					console.log(data)
