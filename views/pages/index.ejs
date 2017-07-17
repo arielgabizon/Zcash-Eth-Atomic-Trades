@@ -4,13 +4,14 @@
 	<div class="md-12-col">
 		<h1>Zcash <-> Eth Atomic Swap</h1>
 		<p>
-			Suppose Alice agees to trade 5 ETH with Bob for 7 ZEC.
+			Suppose Alice agees to trade ETH for ZEC with Bob.
 		</p>
 		<ol>
-			<li>Both Alice and Bob <a href="/setup">create a wallet</a>. </li>
-			<li>Alice <a href="/trade/init">initializes</a> an atomic swap contract.</li>
-			<li>Bob <a href="/trade/review">reviews</a> the terms of the contract and signs off on it.</li>
-			<li>Alice <a href="/trade/settlement">settles</a> the contract.</li>
+			<li>Alice and Bob set up a <a href="/wallet">HD wallet</a> for ZEC.</li>
+			<li>Alice <a href="/trade/eth/init">creates</a> a hashlock contract on Ethereum.</li>
+			<li>Bob <a href="/trade/zec/init?tradeId=1">reviews</a> the terms of ZEC contract and funds it.</li>
+			<li>Alice <a href="/trade/zec/settle?tradeId=1">redeems</a> ZEC in P2SH by providing preimage.</li>
+			<li>Bob redeems ETH by <a href="/trade/eth/settle?tradeId=1">unlocking</a> the contract with the preimage.</li>
 		</ol>
 	</div>
 </div>

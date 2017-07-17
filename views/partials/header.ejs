@@ -13,7 +13,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/static/js/utils.js"></script>
-    <script src="static/js/bundle.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -38,16 +37,19 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li>
-            <a href="/setup">Setup</a>
-          </li>
-          <li>
             <a href="/wallet">Wallet</a>
           </li>
           <li>
-            <a href="/trade/init">Init</a>
+            <a href="/trade/eth/init">(A) Initialize</a>
           </li>
           <li>
-            <a href="/trade/settlement">Settlement</a>
+            <a href="/trade/zec/init?tradeId=1">(B) Review </a>
+          </li>
+          <li>
+            <a href="/trade/zec/settle?tradeId=1">(A) Settle ZEC Contract</a>
+          </li>
+          <li>
+            <a href="/trade/eth/settle?tradeId=1">(B) Settle ETH Contract</a>
           </li>
         </ul>
       </div>

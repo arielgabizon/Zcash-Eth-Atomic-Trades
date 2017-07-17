@@ -3,19 +3,52 @@
 <div class="row">
 	<div class="col-md-offset-3 col-md-6">
   		<h1 align="center">Wallet</h1>
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<form class="form">
-					<div class="form-group">
+  		<div class="panel panel-default">
+            <div class="panel-heading">
+                Create Wallet
+            </div>
+            <div class="panel-body">
+                <form class="form">
+                    <div class="form-group">
                         <label>Network</label>
                         <select id="network" class="form-control">
                             <!--<option value="ETH">Ethereum</option>-->
                             <option value="ZEC">Zcash</option>
                         </select>
                     </div>
-					<div class="form-group">
+                    <div class="form-group">
                         <label>Password</label>
                         <input id="password" type="password" class="form-control" placeholder="" />
+                        <div class="help-block">
+                            This password is used to secure your HD wallet. 
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-primary" id="createBtn">Create</button>
+                    </div>
+                </form>
+                <div id="setupSuccessMessage" class="alert alert-success hidden">
+                    Successfully created HD wallet. Write down the following words and keep it in a safe place: <code id="seedPhrase"></code>
+                </div>
+            </div>
+        </div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Generate New Address
+			</div>
+			<div class="panel-body">
+				<form class="form">
+					<div class="form-group">
+                        <label>Network</label>
+                        <select id="newAddressNetwork" class="form-control">
+                            <!--<option value="ETH">Ethereum</option>-->
+                            <option value="ZEC">Zcash</option>
+                        </select>
+                    </div>
+					<div class="form-group">
+                        <label>Password</label>
+                        <input id="newAddressPassword" type="password" class="form-control" placeholder="" />
                     </div>
 					<center>
 						<button type="button" class="btn btn-primary" id="newAddressBtn">New Address</button>

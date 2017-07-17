@@ -1,0 +1,35 @@
+<% include ../../partials/header %>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 align="center">Settle ETH</h1>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <% include ../../partials/trade %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        Settle
+      </div>
+      <form class="form">
+        <div class="panel-body">
+          <div class="form-group">
+            <label>Preimage</label>
+            <input id="preimage" type="text" class="form-control" placeholder="" />
+          </div>
+          <div class="form-group text-center">
+              <button type="button" class="btn btn-primary" id="unlockBtn">Unlock</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div id="unlockMessage"></div>
+  </div>
+</div>
+
+<script src="/static/js/eth-settle.js"></script>
+
+<% include ../../partials/footer %>
