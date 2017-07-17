@@ -5,6 +5,7 @@ from utils import *
 import sys, json
 from trades import *
 
+
 def Zcash_getaddr():
     print("test")
     return zXcat.zcashd.getnewaddress()
@@ -23,6 +24,7 @@ def Zcash_fund(contract):
     return contract
 
 def Zcash_make_contract(contract):
+    print("in make contract", contract)
     contract = zXcat.make_hashtimelockcontract(contract)
     print("contract",contract)
     save_contract(contract)
@@ -62,19 +64,16 @@ def Zcash_redeem(contract):
 
 print("in python")
 if __name__ == '__main__':
-    print("in python")
     choice = sys.argv[1]
-    if choice == "0":
-        Zcash_getaddr()
-        quit()
-# contract_file = sys.argv[2]
-# print(contract_file)
-print("before file open")
-with open('contract.json') as data_file:
-    contract = json.load(data_file)
+    print("in python with call", choice)
+
+contract = get_contract()
+# print('contract', contract)
+
+if contract:
     if choice == "make":
         print("HERE at 1")
-        print(contract)
+        # print(contract)
         Zcash_make_contract(contract)
         quit()
     elif choice == "fund":

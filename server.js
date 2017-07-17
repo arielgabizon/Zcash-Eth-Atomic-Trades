@@ -5,6 +5,9 @@ var Web3 = require('web3');
 var bodyParser = require('body-parser');
 var uuidv4 = require('uuid/v4');
 
+// var zcash = require('./zcash-rpc');
+var zcash = require('./zcash');
+
 var addrs = require('./addrs');
 
 var app = express();
@@ -162,11 +165,16 @@ try{
 
             instance.trades(req.body.tradeId).then(function(tradeData){
 
-                // TODO: implement me!
+                // TODO: put the trade data in contract.json
+                console.log(tradeData)
+                zcash.Zcash_make_contract(function(contract) {
+                  console.log("p2sh", contract['p2sh'])
+                  res.send({
+                    address: contract['p2sh']
+                  });
+                })
 
-                res.send({
-                    address: "<P2SH address>"
-                });
+
 
             }).catch(function(err){
                 res.send({

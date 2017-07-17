@@ -54,22 +54,18 @@ def hashtimelockcontract(funder, redeemer, secret, lock_increment):
 
 # this methods receives secret hash rather that secret. More fitting for Ethereum xcat
 def make_hashtimelockcontract(contract):
+    print('making htlc')
     funderAddr = CBitcoinAddress(contract['initiator'])
     redeemerAddr = CBitcoinAddress(contract['fulfiller'])
     blocknum = zcashd.getblockcount()
     print("Current blocknum", blocknum)
     redeemblocknum = blocknum + int(contract['lock_increment'])
-    #    print(contract['hash_of_secret'])
-    #print(contract['hash_of_secret'].encode())
-    # hash_of_secret = b'81f8009c3944a1951cf3297c7e54ae58a7300162a96dfe635ecdb6e9407bf41f' #contract['hash_of_secret'].encode()
-    # hash_of_secret = sha256("blaa")
-    # secret = generate_password()
-    # save_secret(secret)
+    print("redeemblocknum", redeemblocknum)
     secret = get_secret()
+    print(secret)
     hash_of_secret = sha256(secret)
     contract['secret'] = secret
     contract['hash_of_secret'] = b2x(hash_of_secret)
-    print(secret)
     print(b2x(hash_of_secret))
     print(type(hash_of_secret))
     print("REDEEMBLOCKNUM ZCASH", redeemblocknum)
@@ -115,22 +111,11 @@ def find_transaction_to_address(p2sh):
             print("Found tx to p2sh", p2sh)
             return tx
 
-# def get_tx_details(txid):
-#     # This method is problematic I haven't gotten the type conversions right
-#     print(bytearray.fromhex(txid))
-#     print(b2x(bytearray.fromhex(txid)))
-#     fund_txinfo = zcashd.gettransaction(bytearray.fromhex(txid))
-#     print(fund_txinfo)
-#
-#     return fund_txinfo['details'][0]
 def find_secret(p2sh,vinid):
     zcashd.importaddress(p2sh, "", True)
     # is this working?
     print("vinid:",vinid)
     txs = zcashd.listtransactions()
-    # print("==========================================LISTTT============", txs)
-    # print()
-    # print('LENNNNNNN:', len(txs))
     print('LENNNNNNN2:', len(txs))
     for tx in txs:
         # print("tx addr:", tx['address'], "tx id:", tx['txid'])
