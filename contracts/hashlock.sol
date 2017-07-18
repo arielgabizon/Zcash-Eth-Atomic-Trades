@@ -12,6 +12,8 @@ contract hashlock {
         uint timeoutBlock;
         string zecTx;
         string zecP2SH;
+        string zecRedeemScript;
+        uint zecAmount;
     }
 
     uint nextTradeId;
@@ -35,7 +37,7 @@ contract hashlock {
         }
     }
 
-    function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr) payable {
+    function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr, string _zec_redeem_script, uint _zec_amount) payable {
 
         if(msg.value <= 0){
             throw;
@@ -49,6 +51,8 @@ contract hashlock {
         trades[nextTradeId].hash = _hash;
         trades[nextTradeId].amount = msg.value;
         trades[nextTradeId].timeoutBlock = block.number + _expires_in;
+        trades[nextTradeId].zecRedeemScript = _zec_redeem_script;
+        trades[nextTradeId].zecAmount = _zec_amount;
 
         newHashlock(msg.sender, nextTradeId, _hash, trades[nextTradeId].redeemer);
     }

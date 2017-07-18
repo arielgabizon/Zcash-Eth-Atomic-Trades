@@ -161,6 +161,38 @@ try{
         });
 
         /**
+         * Gets just the zcash redeemscript/p2sh
+         */
+        app.post('/api/zec/p2sh', function(req, res){
+            var ethBlocks = req.body.ethBlocks
+            var zecBlocks = Math.ceil(ethBlocks / 20)
+            console.log('zecblocks', zecBlocks)
+
+            var contractData = {
+                initiator: req.body.senderZaddr,    // B
+                fulfiller: req.body.redeemerZaddr,     // A
+                timeLock: zecBlocks,
+                hash: req.body.hash
+              }
+
+            zcash.call('make', contractData)
+              .then(function(contract){
+                console.log("Response from make func:", contract)
+                console.log("p2sh", contract['p2sh'])
+                res.send({
+                  redeemblocknum: contract['redeemblocknum'],
+                  redeemScript: contract['redeemScript'],
+                  p2sh: contract['p2sh']
+                  // rawTx: rawTx
+                });
+              }).catch(function(err){
+                  res.send({
+                      error: err.toString()
+                  });
+              });;
+        })
+
+        /**
          * Gets funding transaction P2SH
          */
         app.post('/api/zec/tx', function(req, res){
@@ -244,12 +276,19 @@ try{
          * Submits Alice's redeem transaction
          */
         app.post('/api/zec/tx/redeem', function(req, res){
-          zcash.call('redeem', secret)
-              .then(function(contract){
-                 console.log("Contract returning from redeem call", contract)
-                 console.log("Redeem txid returning from call", contract['redeem_tx'])
+          var data = {
+            preimage: req.body.preimage,
+            fundTx: req.body.fundTx,
+            p2sh: req.body.p2sh,
+            redeemer: req.body.redeemer
+          }
+
+          zcash.call('redeem', data)
+              .then(function(txid){
+                 console.log("Contract returning from redeem call", txid)
+                 console.log("Redeem txid returning from call", txid)
                   res.send({
-                      tx: contract['redeem_tx']
+                      tx: txid
                   });
               }).catch(function(err){
                   res.send({

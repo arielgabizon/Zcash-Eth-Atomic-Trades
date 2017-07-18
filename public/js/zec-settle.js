@@ -29,16 +29,29 @@ $(function(){
                 $(this).attr("disabled","disabled");
 
                 var preimage = $("#preimage").val();
+                var fundTx = $("#fundTx").text();
+                var p2sh = $("#p2sh").text();
+                var senderZAddr = $("#senderZAddr").text();
+                // redeem also with redeem script and p2sh in future
 
                 $.ajax({
                     method: 'POST',
-                    url: '/api/swap/get/' + tradeId
-                }).then(function(data,status,jqXHR){
-
-                    for(var key in data){
-                        $("#"+key).text(data[key]);
+                    url: '/api/zec/tx/redeem',
+                    data: {
+                      preimage: preimage,
+                      fundTx: fundTx,
+                      p2sh: p2sh,
+                      redeemer: senderZAddr
                     }
-
+                }).then(function(data,status,jqXHR){
+                      if(data.error){
+            						console.log("ERROR:", data.error)
+            					} else {
+            						for(var key in data){
+              							console.log(data)
+              							$("#"+key).text(data[key]);
+            						}
+            					}
                 });
 
             }

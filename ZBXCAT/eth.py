@@ -67,6 +67,15 @@ def Zcash_redeem(contract):
     save_contract(contract)
     return txid
 
+def redeem(data):
+    print("data in redeem", data)
+    contract = Contract(get_contract())
+    contract.fund_tx = data['fundTx']
+    contract.p2sh = data['p2sh']
+    contract.fulfiller = data['redeemer']
+    txid = zXcat.redeem_with_secret(contract, data['preimage'])
+    return txid
+
 #print("in python")
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
@@ -94,7 +103,7 @@ if __name__ == '__main__':
         elif command == "getaddr":
             get_addr(contract, data)
         elif command == "redeem":
-            Zcash_redeem(contract)
+            redeem(data)
         elif command  == "refund":
             Zcash_refund(contract)
         else:

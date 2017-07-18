@@ -11,6 +11,30 @@ $(function(){
 
     function onContractReady(instance){
 
+        $('#prepTrade').on('click', function(){
+
+            $.ajax({
+                method: 'POST',
+                url: '/api/zec/p2sh',
+                data: {
+                    ethBlocks: $("#blocksToWait").val(),
+                    initiator: $("#senderZAddr").val(),
+                    fulfiller: $("#redeemerZAddr").val(),
+                    hash: $("#hashRandomX").text()
+                }
+            }).then(function(data,status,jqXHR){
+                if(data.error){
+                  console.log("ERROR", data.error)
+                }else{
+                  console.log("Success", data.p2sh)
+                  $("#lockMessage")
+                      .addClass("alert")
+                      .addClass("alert-success")
+                      .html("Generated Zcash p2sh: " + data.redeemScript);
+                }
+            });
+        })
+
         var submittingLock = false;
         $("#lockBtn").on('click',function(){
             $("#lockMessage")
@@ -25,11 +49,13 @@ $(function(){
                 redeemer = $("#redeemerAccount").val(),
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
+                zecRedeemScript = $('#zecRedeemScript').val(),
+                zecAmount = $('#zecAmount').val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
                 senderZAddr = $("#senderZAddr").val(),
                 sender = $("#senderAccount").val();
 
-                instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
+                instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, zecRedeemScript, zecAmount, {
                     from: sender,
                     value: amount,
                     gas: 1248090
