@@ -11,7 +11,7 @@ contract hashlock {
         uint amount;
         uint timeoutBlock;
         string zecTx;
-        string zecP2SH;
+        bytes32 zecP2SH;
         string zecRedeemScript;
         uint zecAmount;
     }
@@ -27,7 +27,7 @@ contract hashlock {
         nextTradeId = 0;
     }
 
-    function update(uint _trade_id, string _p2sh, string _tx){
+    function update(uint _trade_id, bytes32 _p2sh, string _tx){
 
         if(msg.sender == trades[_trade_id].redeemer){
             trades[_trade_id].zecP2SH = _p2sh;
