@@ -68,7 +68,7 @@ if __name__ == '__main__':
         data = args.d
         data = json.loads(data)
         if 'tradeid' in data:
-            tradeid = args.tradeid
+            tradeid = data['tradeid']
         print("Data in eth.py", data)
 
     if command == "make":
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     elif command == "getaddr":
         new_addr(data)
     elif command == "redeem":
-        redeem(tradeid, data)
+        redeem(data)
     elif command  == "refund":
         Zcash_refund(tradeid, data)
     else:

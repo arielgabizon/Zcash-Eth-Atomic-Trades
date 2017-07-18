@@ -256,7 +256,8 @@ try{
             preimage: req.body.preimage,
             fundTx: req.body.fundTx,
             p2sh: req.body.p2sh,
-            redeemer: req.body.redeemer
+            redeemer: req.body.redeemer,
+            tradeid: req.body.tradeId
           }
 
           zcash.call('redeem', data)

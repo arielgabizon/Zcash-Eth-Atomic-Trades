@@ -41,7 +41,8 @@ $(function(){
                       preimage: preimage,
                       fundTx: fundTx,
                       p2sh: p2sh,
-                      redeemer: senderZAddr
+                      redeemer: senderZAddr,
+                      tradeId: tradeId
                     }
                 }).then(function(data,status,jqXHR){
                       if(data.error){
