@@ -107,10 +107,10 @@ app.get('/api/swap/get/:id', function(req, res){
     function getTrade(tradeId, res){
         var hashlockContract = web3.eth.contract(abi);
         var instance = hashlockContract.at(contractAddress);
-        instance.trades(tradeId).then(function(tradeData){
+        instance.trades(tradeId,function(err,tradeData){
             console.log(tradeData)
             res.send({
-                id: req.params.id,
+                id: tradeId,
                 sender: tradeData[0],
                 redeemer: tradeData[1],
                 senderZAddr: tradeData[2],
