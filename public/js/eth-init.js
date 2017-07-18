@@ -14,7 +14,7 @@ $(function(){
         $('#prepTrade').on('click', function(){
 
             var hash = $("#hashRandomX").text();
-            
+
             if(hash.length == 0 || $("#randomX").val().length == 0){
                 $("#preimageRequiredError").removeClass("hidden");
                 return;
@@ -63,20 +63,20 @@ $(function(){
                 var redeemer = $("#redeemerAccount").val(),
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
-                zecRedeemScript = $('#zecRedeemScript').val(),
+                zecRedeemScript = $('#lockMessage pre').text(),
                 zecAmount = $('#zecAmount').val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
                 senderZAddr = $("#senderZAddr").val(),
                 sender = $("#senderAccount").val();
 
                 instance.lock(
-                    hash, 
-                    redeemer, 
-                    expiry, 
-                    senderZAddr, 
-                    redeemerZAddr, 
-                    zecRedeemScript, 
-                    zecAmount, 
+                    hash,
+                    redeemer,
+                    expiry,
+                    senderZAddr,
+                    redeemerZAddr,
+                    zecRedeemScript,
+                    zecAmount,
                 {
                     from: sender,
                     value: amount,

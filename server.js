@@ -117,7 +117,9 @@ try{
                         amount: tradeData[5],
                         timeoutBlock: tradeData[6],
                         fundTx: tradeData[7],
-                        p2sh: tradeData[8]
+                        p2sh: tradeData[8],
+                        redeemScript: tradeData[9],
+                        zecAmount: tradeData[10]
                     });
                 }).catch(function(err){
                     res.send({

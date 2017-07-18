@@ -21,12 +21,25 @@ $(function(){
 					}
 				}).then(function(data, status, jqXHR){
 					  console.log("data.tx", data.tx)
+						var p2sh = $("#p2sh").text();
+						console.log("p2sh", p2sh)
+						console.log('tradeId', tradeId)
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");
 
-						instance.update(tradeId, $("#p2sh").text() , data.tx ,function(err,txHash){
-							$("#txHash").text(data.tx);
-							$("#fundSuccessMessage").removeClass("hidden");
+						instance.update(tradeId, p2sh , data.tx ,function(err,txHash){
+								if(err){
+									console.log("ERROR", err)
+										$("#lockMessage")
+												.addClass("alert")
+												.addClass("alert-danger")
+												.text(err.toString());
+								}else{
+									console.log("Successfully updated instance with fundTx: ", data.tx)
+									$("#txHash").text(data.tx);
+									$("#fundTx").text(data.tx);
+									$("#fundSuccessMessage").removeClass("hidden");
+								}
 						});
 
 				});
