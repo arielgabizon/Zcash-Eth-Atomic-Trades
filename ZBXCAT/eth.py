@@ -70,10 +70,10 @@ if __name__ == '__main__':
     choice = sys.argv[1]
     print("Choice", choice)
     contract = get_contract()
-    # if sys.argv[2]:
-    #     data = sys.argv[2]
-    #     data = json.loads(data)
-    # print("Data in eth.py", data)
+    if sys.argv[2]:
+        data = sys.argv[2]
+        data = json.loads(data)
+    print("Data in eth.py", data)
 
     if contract:
         if choice == "make":
@@ -84,7 +84,6 @@ if __name__ == '__main__':
             print("at 2")
             Zcash_fund(contract)
         elif choice == "getsecret":
-            print("HEREE")
             Zcash_get_secret(contract)
         elif choice == "getaddr":
             get_addr(contract, data)

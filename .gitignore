@@ -3,3 +3,5 @@ node_modules/
 venv/
 ZBXCAT/__pycache__
 *.pyc
+ZBXCAT/contract.json
+ZBXCAT/secret.json
