@@ -48,10 +48,17 @@ $(function(){
                       if(data.error){
             						console.log("ERROR:", data.error)
             					} else {
-            						for(var key in data){
-              							console.log(data)
-              							$("#"+key).text(data[key]);
-            						}
+                          console.log("Data in redeem UI", data)
+                          console.log("Data tx", data.tx)
+              						// for(var key in data){
+                					// 		console.log(data)
+                					// 		$("#"+key).text(data[key]);
+              						// }
+
+                          $("#unlockMessage")
+                              .addClass("alert")
+                              .addClass("alert-success")
+                              .text("Successfully redeemed ZEC! (Redeem tx: " + data.tx + ")");
             					}
                 });
 

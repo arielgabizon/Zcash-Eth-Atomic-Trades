@@ -43,7 +43,7 @@ $(function(){
                   $("#lockMessage")
                       .addClass("alert")
                       .addClass("alert-success")
-                      .html("Generated Zcash p2sh: <pre>" + data.redeemScript + "</pre>");
+                      .html("Generated Zcash redeemScript: <pre>" + data.redeemScript + "</pre>");
                 }
             });
         })
@@ -69,6 +69,7 @@ $(function(){
                 var redeemer = $("#redeemerAccount").val(),
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
+                // zecRedeemScript = $('#lockMessage pre').text(),
                 zecAmount = $('#zecAmount').val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
                 senderZAddr = $("#senderZAddr").val(),
