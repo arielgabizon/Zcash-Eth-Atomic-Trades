@@ -10,6 +10,8 @@ contract hashlock {
         bytes32 hash;
         uint amount;
         uint timeoutBlock;
+        string zecTx;
+        string zecP2SH;
     }
       
     uint nextTradeId;
@@ -21,6 +23,16 @@ contract hashlock {
       
     function hashlock(){
         nextTradeId = 0;
+    }
+
+    function update(uint trade_id, string _p2sh, string _tx){
+
+        if(msg.sender == trades[trade_id].redeemer){
+            trades[trade_id].zecP2SH = _p2sh;
+            trades[trade_id].zecTx = _tx;
+        }else{
+            throw;
+        }
     }
 
     function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr) payable {

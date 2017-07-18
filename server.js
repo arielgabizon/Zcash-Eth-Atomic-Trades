@@ -157,12 +157,6 @@ try{
 
         });
 
-        app.post('/api/zec/address', function(req, res){
-          res.send({
-            address: "t1QC2Dw6fhHNjTZdSB18aPeKxFKmkk2iXUG"
-          })
-        });
-
         /**
          * Gets funding transaction P2SH
          */
