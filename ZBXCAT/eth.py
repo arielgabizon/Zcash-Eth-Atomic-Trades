@@ -24,6 +24,9 @@ def Zcash_fund(contract):
     save_contract(contract)
     return contract
 
+def Zcash_importp2sh(contract):
+    zXcat.zcashd.importaddress(contract['p2sh'],"",False)
+
 def Zcash_make_contract(contract):
     print("in make contract", contract)
     contract = zXcat.make_hashtimelockcontract(contract)
@@ -91,5 +94,7 @@ if __name__ == '__main__':
             Zcash_redeem(contract, data)
         elif choice  == "refund":
             Zcash_refund(contract)
+        elif choice == "import":
+            Zcash_importp2sh(contract)
         else:
             print("invalid choice")
