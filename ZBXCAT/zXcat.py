@@ -82,7 +82,7 @@ def make_hashtimelockcontract(contract):
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
     contract['p2sh']=p2sh
-    zcashd.importaddress(p2sh,False)
+    zcashd.importaddress(contract['p2sh'],"",False)
     return contract
 
 def fund_htlc(p2sh, amount):
