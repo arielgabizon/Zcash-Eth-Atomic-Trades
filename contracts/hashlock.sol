@@ -27,17 +27,18 @@ contract hashlock {
         nextTradeId = 0;
     }
 
-    function update(uint _trade_id, bytes32 _p2sh, string _tx){
+    function update(uint _trade_id, bytes32 _p2sh, string _tx, string _zec_redeem_script){
 
         if(msg.sender == trades[_trade_id].redeemer){
             trades[_trade_id].zecP2SH = _p2sh;
             trades[_trade_id].zecTx = _tx;
+            trades[nextTradeId].zecRedeemScript = _zec_redeem_script;
         }else{
             throw;
         }
     }
 
-    function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr, string _zec_redeem_script, uint _zec_amount) payable {
+    function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr, uint _zec_amount) payable {
 
         if(msg.value <= 0){
             throw;
@@ -51,7 +52,6 @@ contract hashlock {
         trades[nextTradeId].hash = _hash;
         trades[nextTradeId].amount = msg.value;
         trades[nextTradeId].timeoutBlock = block.number + _expires_in;
-        trades[nextTradeId].zecRedeemScript = _zec_redeem_script;
         trades[nextTradeId].zecAmount = _zec_amount;
 
         newHashlock(msg.sender, nextTradeId, _hash, trades[nextTradeId].redeemer);

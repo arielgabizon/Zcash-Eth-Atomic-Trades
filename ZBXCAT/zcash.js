@@ -34,6 +34,7 @@ function call(arg, data=''){
   } else {
     return spawn(["ZBXCAT/eth.py", arg, '-d', JSON.stringify(data)])
   }
+
 }
 
 module.exports.call = call

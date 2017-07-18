@@ -5,6 +5,7 @@ $(function(){
 
 	function onContractReady(instance){
 
+
 		$("#signBtn").on('click',function(){
 
 				// TODO: sign raw tx
@@ -27,7 +28,7 @@ $(function(){
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");
 
-						instance.update(tradeId, p2sh , data.tx ,function(err,txHash){
+						instance.update(tradeId, p2sh , data.tx , data.redeemScript, function(err,txHash){
 								if(err){
 									console.log("ERROR", err)
 										$("#lockMessage")
@@ -61,10 +62,10 @@ $(function(){
 					}
 			})
 
-			// get raw funding transaction (ZEC)
+			// get data for funding transaction (ZEC)
 			$.ajax({
 				method: 'POST',
-				url: '/api/zec/tx',
+				url: '/api/zec/txdata',
 				data: {
 					tradeId: tradeId
 				}
@@ -72,6 +73,8 @@ $(function(){
 					if(data.error){
 						console.log("ERROR:", data.error)
 					}else{
+						$('#zecAmount').val(data['zecAmount']);
+
 						for(var key in data){
 							console.log(data)
 							$("#"+key).text(data[key]);
@@ -79,6 +82,7 @@ $(function(){
 					}
 			});
 	}
+
 
 	// get address of hashlock contract
     $.ajax({

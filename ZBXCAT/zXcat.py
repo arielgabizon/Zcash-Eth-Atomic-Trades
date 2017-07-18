@@ -53,19 +53,19 @@ def hashtimelockcontract(funder, redeemer, secret, lock_increment):
     return {'p2sh': p2sh, 'redeemblocknum': redeemblocknum, 'redeemScript': b2x(zec_redeemScript), 'redeemer': redeemer, 'funder': funder}
 
 # this methods receives secret hash rather that secret. More fitting for Ethereum xcat
-def make_hashtimelockcontract(contract):
+def make_htlc(data):
+    contract = {}
     print('making htlc')
-    funderAddr = CBitcoinAddress(contract['initiator'])
-    redeemerAddr = CBitcoinAddress(contract['fulfiller'])
+    funderAddr = CBitcoinAddress(data['initiator'])
+    redeemerAddr = CBitcoinAddress(data['fulfiller'])
     blocknum = zcashd.getblockcount()
     print("Current blocknum", blocknum)
-    redeemblocknum = blocknum + int(contract['lock_increment'])
+    redeemblocknum = blocknum + int(data['timeLock'])
     print("redeemblocknum", redeemblocknum)
-    secret = get_secret()
-    print(secret)
+    # secret = get_secret()
+    # print(secret)
+    secret = data['secret']
     hash_of_secret = sha256(secret)
-    contract['secret'] = secret
-    contract['hash_of_secret'] = b2x(hash_of_secret)
     print(b2x(hash_of_secret))
     print(type(hash_of_secret))
     print("REDEEMBLOCKNUM ZCASH", redeemblocknum)
@@ -77,11 +77,12 @@ def make_hashtimelockcontract(contract):
     # Convert the P2SH scriptPubKey to a base58 Bitcoin address
     txin_p2sh_address = CBitcoinAddress.from_scriptPubKey(txin_scriptPubKey)
     p2sh = str(txin_p2sh_address)
-    # Returning all this to be saved locally in p2sh.json
-
+    # Returning all this to be saved locally in contract.json
+    contract['hash_of_secret'] = b2x(hash_of_secret)
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
     contract['p2sh']=p2sh
+    save_contract(contract)
     return contract
 
 def fund_htlc(p2sh, amount):
@@ -265,7 +266,6 @@ def find_recipient(contract):
 
 def new_zcash_addr():
     addr = zcashd.getnewaddress()
-    print('new ZEC addr', addr)
     return addr
 
 def generate(num):

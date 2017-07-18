@@ -20,14 +20,20 @@ $(function(){
                 return;
             }
 
+            var ethBlocks = $("#blocksToWait").val();
+            var initiator = $("#senderZAddr").val();
+            var redeemer = $("#redeemerZAddr").val();
+            var secret = $("#randomX").val();
+
             $.ajax({
                 method: 'POST',
                 url: '/api/zec/p2sh',
                 data: {
-                    ethBlocks: $("#blocksToWait").val(),
-                    initiator: $("#senderZAddr").val(),
-                    fulfiller: $("#redeemerZAddr").val(),
-                    hash: hash
+                    ethBlocks: ethBlocks,
+                    initiator: initiator,
+                    redeemer: redeemer,
+                    hash: hash,
+                    secret: secret
                 }
             }).then(function(data,status,jqXHR){
                 if(data.error){
@@ -63,7 +69,6 @@ $(function(){
                 var redeemer = $("#redeemerAccount").val(),
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
-                zecRedeemScript = $('#lockMessage pre').text(),
                 zecAmount = $('#zecAmount').val(),
                 redeemerZAddr = $("#redeemerZAddr").val(),
                 senderZAddr = $("#senderZAddr").val(),
@@ -75,7 +80,6 @@ $(function(){
                     expiry,
                     senderZAddr,
                     redeemerZAddr,
-                    zecRedeemScript,
                     zecAmount,
                 {
                     from: sender,

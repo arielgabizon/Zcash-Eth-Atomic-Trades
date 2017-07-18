@@ -171,11 +171,13 @@ try{
             console.log('zecblocks', zecBlocks)
 
             var contractData = {
-                initiator: req.body.senderZaddr,    // B
-                fulfiller: req.body.redeemerZaddr,     // A
+                initiator: req.body.initiator,    // B
+                fulfiller: req.body.redeemer,     // A
                 timeLock: zecBlocks,
-                hash: req.body.hash
+                hash: req.body.hash,
+                secret: req.body.secret
               }
+            console.log("CONTRACTDATA", contractData)
 
             zcash.call('make', contractData)
               .then(function(contract){
@@ -195,9 +197,9 @@ try{
         })
 
         /**
-         * Gets funding transaction P2SH
+         * Gets funding data transaction P2SH
          */
-        app.post('/api/zec/tx', function(req, res){
+        app.post('/api/zec/txdata', function(req, res){
             var tradeId = req.body.tradeId
 
             if(!tradeId){
@@ -206,49 +208,19 @@ try{
                 });
             }
 
-            instance.trades(tradeId).then(function(tradeData){
-                console.log("tradeData", tradeData)
-                // tradeData = ['0', '1', 'tmHwGDUj3q1E55zdY7jTPQLkwQLjXx6DFRS', 'tmA4tG9Q5S9hZP2xZnfXZKtkjtnKPoqhttn']
-                // compute lock time as a function of ETH HashLock contract's timeout block
-                // ~ 4 eth blocks per min. 10 eth blocks for every 1 zcash block
-                var ethBlocks = tradeData[6]
-                console.log("ethblocks", ethBlocks)
-                var zecBlocks = Math.ceil(ethBlocks / 20)
-                console.log('zecblocks', zecBlocks)
-                // senderZAddr: tradeData[2],
-                // redeemerZAddr: tradeData[3],
-                // hash: tradeData[4],
-                // amount: tradeData[5],
-                // timeoutBlock: tradeData[6]
-
-                var contractData = {
-                    initiator: tradeData[2],    // B
-                    fulfiller: tradeData[3],     // A
-                    timeLock: zecBlocks,
-                    hash: tradeData[4]
-                  }
-
-                zcash.call('make', contractData)
-                  .then(function(contract){
-                    console.log("Response from make func:", contract)
-                    console.log("p2sh", contract['p2sh'])
-                    res.send({
-                      redeemblocknum: contract['redeemblocknum'],
-                      redeemScript: contract['redeemScript'],
-                      p2sh: contract['p2sh']
-                      // rawTx: rawTx
-                    });
-                  }).catch(function(err){
+            zcash.call('getdata')
+                .then(function(contract){
+                   console.log("Response from getdata:", contract)
+                   res.send({
+                     redeemblocknum: contract['redeemblocknum'],
+                     redeemScript: contract['redeemScript'],
+                     p2sh: contract['p2sh']
+                   });
+                }).catch(function(err){
                       res.send({
                           error: err.toString()
                       });
-                  });;
-
-            }).catch(function(err){
-                res.send({
-                    error: err.toString()
                 });
-            });
         });
 
         /**
@@ -264,8 +236,10 @@ try{
                 .then(function(contract){
                    console.log("Contract returning from call", contract)
                    console.log("Fund txid returning from call", contract['fund_tx'])
+
                     res.send({
-                        tx: contract['fund_tx']
+                        tx: contract['fund_tx'],
+                        redeemScript: contract['redeemScript']
                     });
                 }).catch(function(err){
                     res.send({
@@ -323,7 +297,7 @@ try{
           }
           zcash.call('getaddr', data)
             .then(function(contract){
-                console.log("Getting address", contract)
+                console.log("Getting contract", contract)
                 res.send({
                   address: contract[data['role']]
                 });

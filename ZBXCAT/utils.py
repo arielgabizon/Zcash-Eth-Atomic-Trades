@@ -55,7 +55,10 @@ def get_contract():
 
 # used in Eth xcat
 def save_contract(contract):
+    # print("save contract w id", tradeid, contract)
+    # contracts = {}
     path = os.path.join(xcat_dir, 'contract.json')
+    # contracts[tradeid] = contract
     with open(path, 'w') as outfile:
         json.dump(contract, outfile)
 
