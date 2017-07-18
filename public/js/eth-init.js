@@ -13,6 +13,13 @@ $(function(){
 
         $('#prepTrade').on('click', function(){
 
+            var hash = $("#hashRandomX").text();
+            
+            if(hash.length == 0 || $("#randomX").val().length == 0){
+                $("#preimageRequiredError").removeClass("hidden");
+                return;
+            }
+
             $.ajax({
                 method: 'POST',
                 url: '/api/zec/p2sh',
@@ -20,7 +27,7 @@ $(function(){
                     ethBlocks: $("#blocksToWait").val(),
                     initiator: $("#senderZAddr").val(),
                     fulfiller: $("#redeemerZAddr").val(),
-                    hash: $("#hashRandomX").text()
+                    hash: hash
                 }
             }).then(function(data,status,jqXHR){
                 if(data.error){
@@ -30,13 +37,21 @@ $(function(){
                   $("#lockMessage")
                       .addClass("alert")
                       .addClass("alert-success")
-                      .html("Generated Zcash p2sh: " + data.redeemScript);
+                      .html("Generated Zcash p2sh: <pre>" + data.redeemScript + "</pre>");
                 }
             });
         })
 
         var submittingLock = false;
         $("#lockBtn").on('click',function(){
+
+            var hash = $("#hashRandomX").text();
+
+            if(hash.length == 0 || $("#randomX").val().length == 0){
+                $("#preimageRequiredError").removeClass("hidden");
+                return;
+            }
+
             $("#lockMessage")
                 .removeClass("alert")
                 .removeClass("alert-danger")
@@ -45,8 +60,7 @@ $(function(){
                 submittingLock = true;
                 $(this).attr("disabled","disabled");
 
-                var hash = $("#hashRandomX").text(),
-                redeemer = $("#redeemerAccount").val(),
+                var redeemer = $("#redeemerAccount").val(),
                 expiry = $("#blocksToWait").val(),
                 amount = $("#amount").val(),
                 zecRedeemScript = $('#zecRedeemScript').val(),
@@ -55,7 +69,15 @@ $(function(){
                 senderZAddr = $("#senderZAddr").val(),
                 sender = $("#senderAccount").val();
 
-                instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, zecRedeemScript, zecAmount, {
+                instance.lock(
+                    hash, 
+                    redeemer, 
+                    expiry, 
+                    senderZAddr, 
+                    redeemerZAddr, 
+                    zecRedeemScript, 
+                    zecAmount, 
+                {
                     from: sender,
                     value: amount,
                     gas: 1248090
@@ -174,6 +196,8 @@ $(function(){
         // default to metamask default account
         $("#senderAccount").val(web3.eth.defaultAccount);
 
+        // prepopulate preimage
+        $("#newPreimageBtn").trigger('click');
     });
 
 });
