@@ -9,13 +9,15 @@ $(function(){
 		$("#txHash").text("");
 
 		// TODO: sign raw tx
+		var p2sh = $("#p2sh").text();
+		console.log(p2sh)
 
 		// TODO: submit tx
 		$.ajax({
 			method: 'POST',
 			url: '/api/zec/tx/fund',
 			data: {
-				p2sh: $("#p2sh").text(),
+				p2sh: p2sh,
 				amount: $("#zecAmount").val()
 			}
 		}).then(function(data, status, jqXHR){
@@ -46,7 +48,6 @@ $(function(){
 				tradeId: tradeId
 			}
 		}).then(function(data,status,jqXHR){
-
 			if(data.error){
 				console.log("ERROR:", data.error)
 			}else{

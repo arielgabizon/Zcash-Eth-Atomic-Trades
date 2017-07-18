@@ -175,8 +175,9 @@ try{
                 // compute lock time as a function of ETH HashLock contract's timeout block
                 // ~ 4 eth blocks per min. 10 eth blocks for every 1 zcash block
                 var ethBlocks = tradeData[6]
+                console.log("ethblocks", ethblocks)
                 var zecBlocks = Math.ceil(ethBlocks / 20)
-
+                console.log('zecblocks', zecBlocks)
                 // senderZAddr: tradeData[2],
                 // redeemerZAddr: tradeData[3],
                 // hash: tradeData[4],

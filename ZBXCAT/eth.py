@@ -70,10 +70,10 @@ if __name__ == '__main__':
     choice = sys.argv[1]
     print("Choice", choice)
     contract = get_contract()
-    if sys.argv[2]:
-        data = sys.argv[2]
-        data = json.loads(data)
-    print("Data in eth.py", data)
+    # if sys.argv[2]:
+    #     data = sys.argv[2]
+    #     data = json.loads(data)
+    # print("Data in eth.py", data)
 
     if contract:
         if choice == "make":
