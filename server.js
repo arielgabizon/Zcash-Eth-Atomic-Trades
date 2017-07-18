@@ -211,11 +211,11 @@ try{
             zcash.call('getdata')
                 .then(function(contract){
                    console.log("Response from getdata:", contract)
-                   res.send({
-                     redeemblocknum: contract['redeemblocknum'],
-                     redeemScript: contract['redeemScript'],
-                     p2sh: contract['p2sh']
-                   });
+                   var data = {};
+                   for(var key in contract){
+                     data[key] = contract[key];
+                   }
+                   res.send(data);
                 }).catch(function(err){
                       res.send({
                           error: err.toString()
