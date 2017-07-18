@@ -44,6 +44,7 @@ def Zcash_redeem(data):
     contract = get_contract()
     txid = zXcat.redeem_with_secret(contract, data['preimage'])
     contract['redeem_tx'] = txid
+    contract['preimage'] = data['preimage']
     save_contract(contract)
     return txid
 

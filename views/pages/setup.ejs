@@ -1,9 +1,9 @@
 <% include ../partials/header %>
 
 <div class="row">
-	<div class="col-md-offset-3 col-md-6">
-  		<h1 align="center">Wallet</h1>
-  		<div class="panel panel-default">
+    <div class="col-md-offset-3 col-md-6">
+        <h1 align="center">Setup</h1>
+        <div class="panel panel-default">
             <div class="panel-heading">
                 Create Wallet
             </div>
@@ -32,35 +32,10 @@
                 </div>
             </div>
         </div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Generate New Address
-			</div>
-			<div class="panel-body">
-				<form class="form">
-					<div class="form-group">
-                        <label>Network</label>
-                        <select id="newAddressNetwork" class="form-control">
-                            <!--<option value="ETH">Ethereum</option>-->
-                            <option value="ZEC">Zcash</option>
-                        </select>
-                    </div>
-					<div class="form-group">
-                        <label>Password</label>
-                        <input id="newAddressPassword" type="password" class="form-control" placeholder="" />
-                    </div>
-					<center>
-						<button type="button" class="btn btn-primary" id="newAddressBtn">New Address</button>
-					</center>
-				</form>
-			</div>
-		</div>
-		<p id="newAddressMessage"></p>
-	</div>
+    </div>
 </div>
 
+<script src="static/js/setup.js"></script>
 <script src="static/js/bundle.js"></script>
-<script src="static/js/wallet.js"></script>
 
 <% include ../partials/footer %>

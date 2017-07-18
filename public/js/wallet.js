@@ -2,7 +2,7 @@ $(function(){
 
     $("#createBtn").on('click',function(){
 
-        // generate 
+        // generate
         var hdWallet = keys.genPrivKey($("#password").val(),$("#network").val());
 
         // save private key to local Storage
@@ -13,7 +13,7 @@ $(function(){
 
         $("#setupSuccessMessage").removeClass("hidden");
     });
-	
+
 	$("#newAddressBtn").on('click',function(){
 		var cipherText = localStorage.getItem($("#newAddressNetwork").val());
     	var hdPrivKey = keys.decrypt(cipherText,$("#newAddressPassword").val());
@@ -22,7 +22,7 @@ $(function(){
     	$("#newAddressMessage")
     		.addClass("alert")
     		.addClass("alert-success")
-    		.html('Successfully, generated new address: ' + info.address.toString());
+    		.html('Successfully generated new address: ' + info.address.toString());
 	});
 
 });
