@@ -104,32 +104,6 @@ app.get('/api/swap', function (req, res) {
  */
 app.get('/api/swap/get/:id', function(req, res){
 
-    function getTrade(tradeId, res){
-        var hashlockContract = web3.eth.contract(abi);
-        var instance = hashlockContract.at(contractAddress);
-        instance.trades(tradeId,function(err,tradeData){
-            console.log(tradeData)
-            res.send({
-                id: tradeId,
-                sender: tradeData[0],
-                redeemer: tradeData[1],
-                senderZAddr: tradeData[2],
-                redeemerZAddr: tradeData[3],
-                hash: tradeData[4],
-                amount: tradeData[5],
-                timeoutBlock: tradeData[6],
-                fundTx: tradeData[7],
-                p2sh: tradeData[8],
-                redeemScript: tradeData[9],
-                zecAmount: tradeData[10]
-            });
-        }).catch(function(err){
-            res.send({
-                error: err.toString()
-            });
-        });
-    }
-
     if(!req.params.id){
         res.send({
             error: "Invalid parameters"
@@ -155,7 +129,26 @@ app.get('/api/swap/get/:id', function(req, res){
         });
     }*/else if(/\d+/.test(req.params.id)){
         // id is the trade id
-        getTrade(req.params.id, res);
+        var hashlockContract = web3.eth.contract(abi);
+        var instance = hashlockContract.at(contractAddress);
+        var tradeId = req.params.id;
+        instance.trades(tradeId,function(err,tradeData){
+            console.log(tradeData)
+            res.send({
+                id: tradeId,
+                sender: tradeData[0],
+                redeemer: tradeData[1],
+                senderZAddr: tradeData[2],
+                redeemerZAddr: tradeData[3],
+                hash: tradeData[4],
+                amount: tradeData[5],
+                timeoutBlock: tradeData[6],
+                fundTx: tradeData[7],
+                p2sh: tradeData[8],
+                redeemScript: tradeData[9],
+                zecAmount: tradeData[10]
+            });
+        });
     }else{
         res.send({
             error: "Invalid parameters"
