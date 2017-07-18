@@ -13,8 +13,9 @@ def Zcash_generate(i):
 def Zcash_fund(data):
     contract = get_contract()
     p2sh = contract['p2sh']
-    amount = float(contract['amount'])* zXcat.COIN
+    amount = float(data['amt'])* zXcat.COIN
     fund_txid = zXcat.zcashd.sendtoaddress(p2sh,amount)
+    contract['amount'] = data['amt']
     contract['fund_tx'] = b2x(lx(b2x(fund_txid)))
     print("fund txid:",b2x(lx(b2x(fund_txid))))
     save_contract(contract)

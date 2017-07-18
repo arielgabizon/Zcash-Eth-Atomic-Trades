@@ -18,7 +18,7 @@ $(function(){
 					url: '/api/zec/tx/fund',
 					data: {
 						p2sh: p2sh,
-						amount: $("#zecAmount").val()
+						amount: $("#zecAmount").text()
 					}
 				}).then(function(data, status, jqXHR){
 					  console.log("data.tx", data.tx)
