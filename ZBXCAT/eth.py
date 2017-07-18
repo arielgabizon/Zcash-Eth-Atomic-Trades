@@ -10,8 +10,8 @@ import argparse
 def Zcash_generate(i):
     zXcat.zcashd.generate(i)
 
-def Zcash_fund(tradeid, data):
-    contract = get_contract(tradeid)
+def Zcash_fund(data):
+    contract = get_contract()
     p2sh = contract['p2sh']
     amount = float(contract['amount'])* zXcat.COIN
     fund_txid = zXcat.zcashd.sendtoaddress(p2sh,amount)
