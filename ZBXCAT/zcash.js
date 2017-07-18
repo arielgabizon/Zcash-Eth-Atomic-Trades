@@ -27,9 +27,13 @@ function spawn(cmds){
 }
 
 
-function call(arg, data){
+function call(arg, data=''){
   console.log("Data in zcash call", data)
-  return spawn(["ZBXCAT/eth.py", arg, JSON.stringify(data)])
+  if (data === ''){
+    return spawn(["ZBXCAT/eth.py", arg])
+  } else {
+    return spawn(["ZBXCAT/eth.py", arg, '-d', JSON.stringify(data)])
+  }
 }
 
 module.exports.call = call

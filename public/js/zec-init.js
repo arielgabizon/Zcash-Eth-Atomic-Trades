@@ -20,10 +20,11 @@ $(function(){
 						amount: $("#zecAmount").val()
 					}
 				}).then(function(data, status, jqXHR){
+					  console.log("data.tx", data.tx)
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");
 
-						instance.update(tradeId,$("#p2sh").text(),data.tx,function(err,txHash){
+						instance.update(tradeId, $("#p2sh").text() , data.tx ,function(err,txHash){
 							$("#txHash").text(data.tx);
 							$("#fundSuccessMessage").removeClass("hidden");
 						});

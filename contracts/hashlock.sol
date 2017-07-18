@@ -25,11 +25,11 @@ contract hashlock {
         nextTradeId = 0;
     }
 
-    function update(uint trade_id, string _p2sh, string _tx){
+    function update(uint _trade_id, string _p2sh, string _tx){
 
-        if(msg.sender == trades[trade_id].redeemer){
-            trades[trade_id].zecP2SH = _p2sh;
-            trades[trade_id].zecTx = _tx;
+        if(msg.sender == trades[_trade_id].redeemer){
+            trades[_trade_id].zecP2SH = _p2sh;
+            trades[_trade_id].zecTx = _tx;
         }else{
             throw;
         }

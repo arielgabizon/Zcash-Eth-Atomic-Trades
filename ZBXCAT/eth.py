@@ -4,10 +4,12 @@ from zXcat import b2x,lx
 from utils import *
 import sys, json
 from trades import *
+import argparse
 
 def get_addr(contract, data):
     role = data['role']
     addr = zXcat.new_zcash_addr()
+    print("addr in get_addr", addr)
     contract[role] = str(addr)
     save_contract(contract)
 
@@ -67,29 +69,33 @@ def Zcash_redeem(contract):
 
 #print("in python")
 if __name__ == '__main__':
-    choice = sys.argv[1]
-    print("Choice", choice)
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("command", action="store", help="next step of the zcash trade")
+    parser.add_argument("-d", action="store", help="additional data")
+    args = parser.parse_args()
+    command = args.command
+    if args.d:
+        data = args.d
+        data = json.loads(data)
+        print("Data in eth.py", data)
+
     contract = get_contract()
-    # if sys.argv[2]:
-    #     data = sys.argv[2]
-    #     data = json.loads(data)
-    # print("Data in eth.py", data)
 
     if contract:
-        if choice == "make":
+        if command == "make":
             print("HERE at 1")
             Zcash_make_contract(contract)
             quit()
-        elif choice == "fund":
+        elif command == "fund":
             print("at 2")
             Zcash_fund(contract)
-        elif choice == "getsecret":
+        elif command == "getsecret":
             Zcash_get_secret(contract)
-        elif choice == "getaddr":
-            get_addr(contract)
-        elif choice == "redeem":
+        elif command == "getaddr":
+            get_addr(contract, data)
+        elif command == "redeem":
             Zcash_redeem(contract)
-        elif choice  == "refund":
+        elif command  == "refund":
             Zcash_refund(contract)
         else:
             print("invalid choice")
