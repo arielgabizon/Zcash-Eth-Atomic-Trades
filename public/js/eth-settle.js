@@ -54,12 +54,12 @@ $(function(){
                                 if(entry.transactionHash == txHash){
 
                                     removeTrade(tradeId);
-                                    
+
                                     $("#unlockMessage")
                                         .addClass("alert")
                                         .addClass("alert-success")
                                         .text("Successfully unlocked funds (tx: " + txHash + ")");
-                                    
+
                                     break;
                                 }
                             }
@@ -67,7 +67,7 @@ $(function(){
                         });
 
                     }
-                    
+
                 });
 
             }
@@ -79,7 +79,7 @@ $(function(){
         method: 'GET',
         url: '/api/swap/get/' + tradeId
     }).then(function(data,status,jqXHR){
-
+        console.log("Data from api/swap", data)
         for(var key in data){
             $("#"+key).text(data[key]);
         }

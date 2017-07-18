@@ -50,7 +50,7 @@ $(function(){
         method: 'GET',
         url: '/api/swap/get/' + tradeId
     }).then(function(data,status,jqXHR){
-
+        console.log("Data from api/swap", data)
         for(var key in data){
             $("#"+key).text(data[key]);
         }

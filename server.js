@@ -106,7 +106,7 @@ try{
 
             function getTrade(tradeId, res){
                 instance.trades(tradeId).then(function(tradeData){
-                    // console.log(arguments)
+                    console.log(tradeData)
                     res.send({
                         id: req.params.id,
                         sender: tradeData[0],
@@ -115,7 +115,9 @@ try{
                         redeemerZAddr: tradeData[3],
                         hash: tradeData[4],
                         amount: tradeData[5],
-                        timeoutBlock: tradeData[6]
+                        timeoutBlock: tradeData[6],
+                        fundTx: tradeData[7],
+                        p2sh: tradeData[8]
                     });
                 }).catch(function(err){
                     res.send({
