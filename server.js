@@ -105,7 +105,10 @@ try{
         app.get('/api/swap/get/:id', function(req, res){
 
             function getTrade(tradeId, res){
+                console.log("Tradeid in getTrade", typeof(tradeId))
+                console.log(instance.trades(web3.toHex('6')))
                 instance.trades(tradeId).then(function(tradeData){
+                    console.log(arguments)
                     res.send({
                         id: req.params.id,
                         sender: tradeData[0],
@@ -148,7 +151,7 @@ try{
                 });
             }*/else if(/\d+/.test(req.params.id)){
                 // id is the trade id
-                getTrade(req.params.id,res);
+                getTrade(req.params.id, res);
             }else{
                 res.send({
                     error: "Invalid parameters"
@@ -352,7 +355,7 @@ try{
         });
 
         app.get('/trade/eth/init',function(req,res){
-          res.render('pages/trade/eth-init',{ 
+          res.render('pages/trade/eth-init',{
             title: "Init ETH HLC"
           });
         });

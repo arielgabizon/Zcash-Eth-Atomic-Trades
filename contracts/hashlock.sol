@@ -13,14 +13,14 @@ contract hashlock {
         string zecTx;
         string zecP2SH;
     }
-      
+
     uint nextTradeId;
 
     event newHashlock(address sender, uint trade_id, bytes32 hash, address redeemer);
     event unlockHash(uint trade_id, string preimage);
 
     mapping (uint => tradeData) public trades;
-      
+
     function hashlock(){
         nextTradeId = 0;
     }
@@ -36,7 +36,7 @@ contract hashlock {
     }
 
     function lock(bytes32 _hash, address _redeemer, uint _expires_in, string _sender_zaddr, string _redeemer_zaddr) payable {
-        
+
         if(msg.value <= 0){
             throw;
         }
@@ -49,7 +49,7 @@ contract hashlock {
         trades[nextTradeId].hash = _hash;
         trades[nextTradeId].amount = msg.value;
         trades[nextTradeId].timeoutBlock = block.number + _expires_in;
-        
+
         newHashlock(msg.sender, nextTradeId, _hash, trades[nextTradeId].redeemer);
     }
 
