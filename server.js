@@ -39,28 +39,28 @@ try{
         /*app.post('/setup', function(req, res){
             var pw = req.body.password
             var genpriv = addrs.genPrivKey(pw, 'testnet')
-						console.log("genpriv.privkey", typeof(genpriv.privkey))
-						// increment the num of keys generated
-						var rand = Math.floor(Math.random() * 200);
-						var genpub = addrs.newPubKey(genpriv.privkey, rand)
+                        console.log("genpriv.privkey", typeof(genpriv.privkey))
+                        // increment the num of keys generated
+                        var rand = Math.floor(Math.random() * 200);
+                        var genpub = addrs.newPubKey(genpriv.privkey, rand)
             // this is bad. get working on client side with browserify
             res.send({
                 code: genpriv.code.toString(),
                 privkey: genpriv.privkey.toString(),
-								pubkey: genpub.pubkey.toString(),
-								address: genpub.address.toString()
+                                pubkey: genpub.pubkey.toString(),
+                                address: genpub.address.toString()
             });
         });
 
-		app.post('/wallet', function(req, res){
-				var privkey = req.body.privkey;
-				console.log("privkey", privkey)
-				var rand = Math.floor(Math.random() * 200);
-				var genpub = addrs.newPubKey(privkey, rand)
-				res.send({
-						address: genpub.address.toString()
-				});
-		});*/
+        app.post('/wallet', function(req, res){
+                var privkey = req.body.privkey;
+                console.log("privkey", privkey)
+                var rand = Math.floor(Math.random() * 200);
+                var genpub = addrs.newPubKey(privkey, rand)
+                res.send({
+                        address: genpub.address.toString()
+                });
+        });*/
 
 
         /**
@@ -340,31 +340,43 @@ try{
          * pages
          *****************************************************************/
         app.get('/',function(req,res){
-            res.render('pages/index');
+            res.render('pages/index',{
+                title: "Home"
+            });
         });
 
-		app.get('/wallet', function(req, res){
-			res.render('pages/wallet');
-		});
+        app.get('/wallet', function(req, res){
+            res.render('pages/wallet',{
+                title: "Wallet"
+            });
+        });
 
         app.get('/trade/eth/init',function(req,res){
-            res.render('pages/trade/eth-init');
+          res.render('pages/trade/eth-init',{ 
+            title: "Init ETH HLC"
+          });
         });
 
         app.get('/trade/zec/init',function(req,res){
-            res.render('pages/trade/zec-init');
+          res.render('pages/trade/zec-init',{
+            title: "Init ZEC HLC"
+          });
         });
 
         app.get('/trade/zec/settle',function(req,res){
-            res.render('pages/trade/zec-settle');
+          res.render('pages/trade/zec-settle',{
+            title: "Settle ZEC HLC"
+          });
         });
 
         app.get('/trade/eth/settle',function(req,res){
-            res.render('pages/trade/eth-settle');
+          res.render('pages/trade/eth-settle',{
+            title: "Settle ETH HLC"
+          });
         });
 
         app.listen(3000,function(){
-            console.log("http://localhost:3000");
+          console.log("http://localhost:3000");
         });
 
     });

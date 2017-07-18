@@ -178,4 +178,65 @@ contract('HashLock', function(accounts) {
 
   });
 
+  it("should allow counterparty to update ZEC details in contract",function(){
+
+    return HashLock.deployed().then(function(instance){
+
+      return instance.lock(hash,redeemer,4,z1,z2,{
+        from: sender,
+        gas: 1248090,
+        value: 100
+      }).then(function(result){
+
+        var tradeId = result.logs[0].args.trade_id
+          p2sh = 't2HCJUGw6xdtAC13vHXEbKs8Zb2BkJy9qfP',
+          zecTx = '38c6edf55aca1a158fb3eac2c23d88a9db9be66f594407bbb72cba464594cb4c';
+        return instance.update(tradeId, p2sh, zecTx, { from: redeemer })
+          .then(function(result2){
+            return instance.trades.call(tradeId,{ from: redeemer });
+          })
+          .then(function(tradedata){
+            assert.equal(tradedata[0],sender);
+            assert.equal(tradedata[1],redeemer);
+            assert.equal(tradedata[2],z1);
+            assert.equal(tradedata[3],z2);
+            assert.equal(tradedata[4],hash.toLowerCase());
+            assert.equal(tradedata[5],100);
+            assert.equal(tradedata[6].toNumber(),result.receipt.blockNumber+4);
+            assert.equal(tradedata[7],zecTx);
+            assert.equal(tradedata[8],p2sh);
+          });
+        
+      });
+
+    });
+
+  });
+
+  it("should only allow counterparty to update ZEC details in contract",function(){
+
+    return HashLock.deployed().then(function(instance){
+
+      return instance.lock(hash,redeemer,4,z1,z2,{
+        from: sender,
+        gas: 1248090,
+        value: 100
+      }).then(function(result){
+
+        var tradeId = result.logs[0].args.trade_id,
+          p2sh = 't2HCJUGw6xdtAC13vHXEbKs8Zb2BkJy9qfP',
+          zecTx = '38c6edf55aca1a158fb3eac2c23d88a9db9be66f594407bbb72cba464594cb4c';
+        return instance.update(tradeId, p2sh, zecTx, { from: sender });
+        
+      }).then(function(result2){
+        assert.fail('should not enter here'); 
+      })
+      .catch(function(err){
+        assert.isOk(err);
+      });
+
+    });
+
+  });
+
 });
