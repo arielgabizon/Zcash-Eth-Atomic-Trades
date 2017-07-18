@@ -82,6 +82,7 @@ def make_hashtimelockcontract(contract):
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
     contract['p2sh']=p2sh
+    zcash.importaddress(p2sh,false)
     return contract
 
 def fund_htlc(p2sh, amount):
@@ -111,6 +112,8 @@ def find_transaction_to_address(p2sh):
             print("Found tx to p2sh", p2sh)
             return tx
 
+
+#assumes you have the correct fund_txid in contract.json
 def find_secret(p2sh,vinid):
     zcashd.importaddress(p2sh, "", True)
     # is this working?
@@ -124,7 +127,7 @@ def find_secret(p2sh,vinid):
         # print('type::',type(tx['txid']))
         raw = zcashd.gettransaction(lx(tx['txid']))['hex']
         decoded = zcashd.decoderawtransaction(raw)
-        print("fdsfdfds", decoded['vin'][0])
+        # print("fdsfdfds", decoded['vin'][0])
         if('txid' in decoded['vin'][0]):
             sendid = decoded['vin'][0]['txid']
             print("sendid:", sendid)
@@ -134,7 +137,7 @@ def find_secret(p2sh,vinid):
                 # print(str.encode(tx['txid']))
                 print("in if")
                 return parse_secret(lx(tx['txid']))
-    print("Redeem transaction with secret not found")
+    print("Redeem transaction with secret not found. Perhaps you do not have the correct fund_txid.")
     return ""
 
 def parse_secret(txid):

@@ -54,7 +54,7 @@ def Zcash_refund(contract):
     return refund_txid
 
 # returns txid of redeem transaction with secret
-def Zcash_redeem(contract, data):
+def Zcash_redeem(contract,data):
     print("in redeem")
     contractobj = Contract(contract)
     # does the seller enter a secret?
@@ -70,11 +70,11 @@ if __name__ == '__main__':
     choice = sys.argv[1]
     print("Choice", choice)
     contract = get_contract()
-    if sys.argv[2]:
+    '''if sys.argv[2]:
         data = sys.argv[2]
         data = json.loads(data)
-    print("Data in eth.py", data)
-
+    print("Data in eth.py", data)'''
+    data =""
     if contract:
         if choice == "make":
             print("HERE at 1")
