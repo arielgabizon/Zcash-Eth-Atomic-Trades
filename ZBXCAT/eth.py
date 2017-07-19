@@ -64,12 +64,15 @@ if __name__ == '__main__':
     parser.add_argument("-d", action="store", help="additional data")
     args = parser.parse_args()
     command = args.command
-    if args.d:
+    try:
         data = args.d
         data = json.loads(data)
+        print("Data in eth.py", data)
         if 'tradeid' in data:
             tradeid = args.tradeid
-        print("Data in eth.py", data)
+    except:
+        print("args.d not defined", args.d)
+        pass
 
     if command == "make":
         zXcat.make_htlc(data)
