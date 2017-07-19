@@ -208,14 +208,14 @@ try{
                 });
             }
 
-            zcash.call('getdata')
+            zcash.call('getdata', '')
                 .then(function(contract){
                    console.log("Response from getdata:", contract)
-                   res.send({
-                     redeemblocknum: contract['redeemblocknum'],
-                     redeemScript: contract['redeemScript'],
-                     p2sh: contract['p2sh']
-                   });
+                   var data = {};
+                   for(var key in contract){
+                     data[key] = contract[key];
+                   }
+                   res.send(data);
                 }).catch(function(err){
                       res.send({
                           error: err.toString()
@@ -260,11 +260,11 @@ try{
           }
 
           zcash.call('redeem', data)
-              .then(function(txid){
-                 console.log("Contract returning from redeem call", txid)
-                 console.log("Redeem txid returning from call", txid)
+              .then(function(contract){
+                 console.log("Contract returning from redeem call", contract)
+                 console.log("Redeem txid returning from call", contract['redeem_tx'])
                   res.send({
-                      tx: txid
+                      tx: contract['redeem_tx']
                   });
               }).catch(function(err){
                   res.send({
@@ -277,7 +277,7 @@ try{
          * Submits Bob's refund transaction
          */
         app.post('/api/zec/tx/refund', function(req, res){
-          zcash.call('refund')
+          zcash.call('refund', '')
             .then(function(contract){
                 console.log("Contract returning from refund call", contract)
                 console.log("Redeem txid returning from call", contract['refund_tx'])
