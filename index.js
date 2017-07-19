@@ -259,11 +259,11 @@ app.post('/api/zec/tx/redeem', function(req, res){
   }
 
   zcash.call('redeem', data)
-      .then(function(txid){
-         console.log("Contract returning from redeem call", txid)
-         console.log("Redeem txid returning from call", txid)
+      .then(function(contract){
+         console.log("Contract returning from redeem call", contract)
+         console.log("Redeem contract returning from call", contract['redeem_tx'])
           res.send({
-              tx: txid
+              tx: contract['redeem_tx']
           });
       }).catch(function(err){
           res.send({

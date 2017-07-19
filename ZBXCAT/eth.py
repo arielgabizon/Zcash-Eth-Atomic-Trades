@@ -25,8 +25,8 @@ def Zcash_fund(data):
     return contract
 
 # finds seller's redeem tx and gets secret from it
-def Zcash_get_secret(tradeid):
-    contract = get_contract(tradeid)
+def Zcash_get_secret():
+    contract = get_contract()
     print("In Zcash_get_secret python")
     secret = zXcat.find_secret(contract['p2sh'], contract['fund_tx'])
     print("secret found is", secret)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         print("data in fund", data)
         Zcash_fund(data)
     elif command == "getsecret":
-        Zcash_get_secret(tradeid)
+        Zcash_get_secret()
     elif command == "getaddr":
         new_addr(data)
     elif command == "redeem":
