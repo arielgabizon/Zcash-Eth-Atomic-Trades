@@ -43,7 +43,11 @@ $(function(){
                   $("#prepMessage")
                       .addClass("alert")
                       .addClass("alert-success")
-                      .html("Generated Zcash p2sh: <pre>" + data.redeemScript + "</pre>");
+                      .html("Generated Zcash redeemScript: <pre>" + data.redeemScript + "</pre>");
+                  $("#p2shMessage")
+                      .addClass("alert")
+                      .addClass("alert-success")
+                      .html("Generated Zcash p2sh: <pre>" + data.p2sh + "</pre>");
                 }
             });
         })
@@ -61,7 +65,7 @@ $(function(){
                 .removeClass("alert")
                 .removeClass("alert-danger")
                 .removeClass("alert-success");
-            
+
             //$(this).attr("disabled","disabled");
 
             var redeemer = $("#redeemerAccount").val(),
@@ -108,7 +112,7 @@ $(function(){
                                 .addClass("alert-success")
                                 .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
 
-                    
+
                         }
 
                     });
