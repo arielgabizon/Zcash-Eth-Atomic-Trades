@@ -274,16 +274,14 @@ def generate(num):
     return blocks
 
 
-
-
 # redeems funded tx automatically, by scanning for transaction to the p2sh
 # i.e., doesn't require buyer telling us fund txid
 # returns false if fund tx doesn't exist or is too small
 def redeem_with_secret(contract, secret):
     # How to find redeemScript and redeemblocknum from blockchain?
     # print("Redeeming contract using secret", contract.__dict__)
-    p2sh = contract.p2sh
-    minamount = float(contract.amount)
+    p2sh = contract['p2sh']
+    minamount = float(contract['amount'])
     #checking there are funds in the address
     amount = check_funds(p2sh)
     if(amount < minamount):
@@ -298,7 +296,7 @@ def redeem_with_secret(contract, secret):
         redeemPubKey = find_redeemAddr(contract)
         print('redeemPubKey', redeemPubKey)
 
-        redeemScript = CScript(x(contract.redeemScript))
+        redeemScript = CScript(x(contract['redeemScript']))
         txin = CMutableTxIn(fundtx['outpoint'])
         txout = CMutableTxOut(fundtx['amount'] - FEE, redeemPubKey.to_scriptPubKey())
         # Create the unsigned raw transaction.
@@ -311,9 +309,6 @@ def redeem_with_secret(contract, secret):
         # secret = get_secret()
         preimage = secret.encode('utf-8')
         txin.scriptSig = CScript([sig, privkey.pub, preimage, OP_TRUE, redeemScript])
-
-        # exit()
-
         # print("txin.scriptSig", b2x(txin.scriptSig))
         txin_scriptPubKey = redeemScript.to_p2sh_scriptPubKey()
         # print('Redeem txhex', b2x(tx.serialize()))
@@ -324,7 +319,6 @@ def redeem_with_secret(contract, secret):
         return  b2x(lx(b2x(txid)))
     else:
         print("No contract for this p2sh found in database", p2sh)
-
 
 
 # given a contract return true or false according to whether the relevant fund tx's timelock is still valid
