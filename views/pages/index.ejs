@@ -8,10 +8,10 @@
 		</p>
 		<ol>
 			<li>Alice and Bob set up a <a href="/wallet">HD wallet</a> for ZEC.</li>
-			<li>Alice <a href="/trade/eth/init">creates</a> a hashlock contract on Ethereum.</li>
-			<li>Bob <a href="/trade/zec/init?tradeId=1">reviews</a> the terms of ZEC contract and funds it.</li>
-			<li>Alice <a href="/trade/zec/settle?tradeId=1">redeems</a> ZEC in P2SH by providing preimage.</li>
-			<li>Bob redeems ETH by <a href="/trade/eth/settle?tradeId=1">unlocking</a> the contract with the preimage.</li>
+			<li>Alice <a href="/trade/eth/init">locks funds</a> up in a contract on Ethereum using a preimage, and creates a pay-to-script-hash address to receive payment on Zcash.</li>
+			<li>Bob <a href="/trade/zec/init?tradeId=1">reviews</a> the terms of P2SH ZEC contract and funds it.</li>
+			<li>Alice <a href="/trade/zec/settle?tradeId=1">redeems</a> ZEC from the P2SH by providing preimage.</li>
+			<li>Bob redeems ETH by using the preimage to <a href="/trade/eth/settle?tradeId=1">unlock</a> the funds in the contract.</li>
 		</ol>
 	</div>
 </div>
