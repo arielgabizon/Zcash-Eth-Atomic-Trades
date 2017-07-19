@@ -17,8 +17,8 @@ from zcash.core.scripteval import VerifyScript, SCRIPT_VERIFY_P2SH
 from zcash.wallet import CBitcoinAddress, CBitcoinSecret, P2SHBitcoinAddress, P2PKHBitcoinAddress
 from utils import *
 
-# SelectParams('testnet')
-SelectParams('regtest')
+SelectParams('testnet')
+# SelectParams('regtest')
 zcashd = zcash.rpc.Proxy()
 FEE = 0.001*COIN
 

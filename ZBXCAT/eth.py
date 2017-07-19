@@ -83,7 +83,7 @@ if __name__ == '__main__':
     elif command == "getaddr":
         new_addr(data)
     elif command == "redeem":
-        redeem(tradeid, data)
+        redeem(data)
     elif command  == "refund":
         Zcash_refund(tradeid, data)
     else:
