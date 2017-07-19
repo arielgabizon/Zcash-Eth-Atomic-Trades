@@ -5,6 +5,20 @@ $(function(){
 
 	function onContractReady(instance){
 
+		instance.trades(tradeId,function(err,tradeData){
+            console.log(tradeData)
+            $("#sender").text(tradeData[0]);
+            $("#redeemer").text(tradeData[1]);
+            $("#senderZAddr").text(tradeData[2]);
+            $("#redeemerZAddr").text(tradeData[3]);
+            $("#hash").text(tradeData[4]);
+            $("#amount").text(tradeData[5]);
+            $("#timeoutBlock").text(tradeData[6]);
+            $("#fundTx").text(tradeData[7]);
+            $("#p2sh").text(tradeData[8]);
+            $("#redeemScript").text(tradeData[9]);
+            $("#zecAmount").text(tradeData[10]);
+        });
 
 		$("#signBtn").on('click',function(){
 
@@ -48,19 +62,19 @@ $(function(){
 		});
 
 		// get trade info from Ethereum contract
-			$.ajax({
-				method: 'GET',
-				url: '/api/swap/get/' + tradeId
-			}).then(function(data,status,jqXHR){
-					if(data.error){
-						console.log("ERROR:", data.error)
-					}else{
-						for(var key in data){
-							console.log(data)
-							$("#"+key).text(data[key]);
-						}
-					}
-			})
+			// $.ajax({
+			// 	method: 'GET',
+			// 	url: '/api/swap/get/' + tradeId
+			// }).then(function(data,status,jqXHR){
+			// 		if(data.error){
+			// 			console.log("ERROR:", data.error)
+			// 		}else{
+			// 			for(var key in data){
+			// 				console.log(data)
+			// 				$("#"+key).text(data[key]);
+			// 			}
+			// 		}
+			// })
 
 			// get data for funding transaction (ZEC)
 			$.ajax({

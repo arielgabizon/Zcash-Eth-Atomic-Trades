@@ -40,7 +40,7 @@ $(function(){
                   console.log("ERROR", data.error)
                 }else{
                   console.log("Success", data.p2sh)
-                  $("#lockMessage")
+                  $("#prepMessage")
                       .addClass("alert")
                       .addClass("alert-success")
                       .html("Generated Zcash p2sh: <pre>" + data.redeemScript + "</pre>");
@@ -48,7 +48,6 @@ $(function(){
             });
         })
 
-        var submittingLock = false;
         $("#lockBtn").on('click',function(){
 
             var hash = $("#hashRandomX").text();
@@ -62,67 +61,62 @@ $(function(){
                 .removeClass("alert")
                 .removeClass("alert-danger")
                 .removeClass("alert-success");
-            if(!submittingLock){
-                submittingLock = true;
-                $(this).attr("disabled","disabled");
+            
+            //$(this).attr("disabled","disabled");
 
-                var redeemer = $("#redeemerAccount").val(),
-                expiry = $("#blocksToWait").val(),
-                amount = $("#amount").val(),
-                zecAmount = $('#zecAmount').val(),
-                redeemerZAddr = $("#redeemerZAddr").val(),
-                senderZAddr = $("#senderZAddr").val(),
-                sender = $("#senderAccount").val();
+            var redeemer = $("#redeemerAccount").val(),
+            expiry = $("#blocksToWait").val(),
+            amount = $("#amount").val(),
+            zecAmount = $('#zecAmount').val(),
+            redeemerZAddr = $("#redeemerZAddr").val(),
+            senderZAddr = $("#senderZAddr").val(),
+            sender = $("#senderAccount").val();
 
-                instance.lock(
-                    hash,
-                    redeemer,
-                    expiry,
-                    senderZAddr,
-                    redeemerZAddr,
-                    zecAmount,
-                {
-                    from: sender,
-                    value: amount,
-                    gas: 1248090
-                },function(err,txHash){
-                    if(err){
-                        $("#lockMessage")
-                            .addClass("alert")
-                            .addClass("alert-danger")
-                            .text(err.toString());
-                    }else{
+            instance.lock(
+                hash,
+                redeemer,
+                expiry,
+                senderZAddr,
+                redeemerZAddr,
+                zecAmount,
+            {
+                from: sender,
+                value: amount,
+                gas: 1248090
+            },function(err,txHash){
+                if(err){
+                    $("#lockMessage")
+                        .addClass("alert")
+                        .addClass("alert-danger")
+                        .text(err.toString());
+                }else{
 
-                        var events = instance.allEvents();
+                    var events = instance.allEvents();
 
-                        events.get(function(err,log){
+                    events.watch(function(err,entry){
 
-                            for(var i = log.length-1; i >= 0; i--){
-                                // check transaction hash matches
-                                var entry = log[i], tradeId = entry.args.trade_id;
-                                if(entry.transactionHash == txHash){
-                                    saveTx({
-                                        tx: txHash,
-                                        tradeId: tradeId
-                                    });
+                        var tradeId = entry.args.trade_id;
+                        if(entry.transactionHash == txHash){
+                            saveTx({
+                                tx: txHash,
+                                tradeId: tradeId
+                            });
 
-                                    var url = encodeURI('/trade/zec/init?tradeId='+ tradeId);
-                                    $("#lockMessage")
-                                        .addClass("alert")
-                                        .addClass("alert-success")
-                                        .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
-                                    break;
-                                }
-                            }
+                            var url = encodeURI('/trade/zec/init?tradeId='+ tradeId);
+                            $("#lockMessage")
+                                .addClass("alert")
+                                .addClass("alert-success")
+                                .html("Successfully locked funds (tradeId: " +  tradeId + '). Send <a target="_blank" href="'+ url +'">link</a> to counterparty.');
 
-                        });
+                    
+                        }
 
-                    }
-                    submittingLock = false;
-                    $("#lockBtn").removeAttr("disabled");
-                });
+                    });
 
-            }
+                }
+                //$("#lockBtn").removeAttr("disabled");
+            });
+
         });
 
     }

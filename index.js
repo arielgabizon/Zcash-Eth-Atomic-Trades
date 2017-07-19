@@ -102,32 +102,33 @@ app.get('/api/swap', function (req, res) {
 /**
  * Get Swap info
  */
-app.get('/api/swap/get/:id', function(req, res){
+/*app.get('/api/swap/get/:id', function(req, res){
 
     if(!req.params.id){
         res.send({
             error: "Invalid parameters"
         });
     }
-    /*else if(/^0x/.test(req.params.id)){
-        // id is a transaction hash
-        var txId = req.params.id;
-        web3.eth.getTransactionReceipt(txId,function(err,result){
-            if(err == null || result == null){
-                res.send({
-                    error: "tx: " + txId + " was not found."
-                });
-            }
-            else if(err){
-                res.send({
-                    error: err.toString()
-                });
-            }else{
-                // TODO: get trade id
-                getTrade(txId,res);
-            }
-        });
-    }*/else if(/\d+/.test(req.params.id)){
+    // else if(/^0x/.test(req.params.id)){
+    //     // id is a transaction hash
+    //     var txId = req.params.id;
+    //     web3.eth.getTransactionReceipt(txId,function(err,result){
+    //         if(err == null || result == null){
+    //             res.send({
+    //                 error: "tx: " + txId + " was not found."
+    //             });
+    //         }
+    //         else if(err){
+    //             res.send({
+    //                 error: err.toString()
+    //             });
+    //         }else{
+    //             // TODO: get trade id
+    //             getTrade(txId,res);
+    //         }
+    //     });
+    // }
+    else if(/\d+/.test(req.params.id)){
         // id is the trade id
         var hashlockContract = web3.eth.contract(abi);
         var instance = hashlockContract.at(contractAddress);
@@ -155,7 +156,7 @@ app.get('/api/swap/get/:id', function(req, res){
         });
     }
 
-});
+});*/
 
 /**
  * Gets just the zcash redeemscript/p2sh
