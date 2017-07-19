@@ -77,16 +77,37 @@ $(function(){
     }
 
     // get trade info from Ethereum contract
-    // $.ajax({
-    //     method: 'GET',
-    //     url: '/api/swap/get/' + tradeId
-    // }).then(function(data,status,jqXHR){
-    //     console.log("Data from api/swap", data)
-    //     for(var key in data){
-    //         $("#"+key).text(data[key]);
-    //     }
+    $.ajax({
+        method: 'GET',
+        url: '/api/swap/get/' + tradeId
+    }).then(function(data,status,jqXHR){
+        console.log("Data from api/swap", data)
+        for(var key in data){
+            $("#"+key).text(data[key]);
+        }
 
-    // });
+    });
+
+    // get data for ZEC
+    $.ajax({
+      method: 'POST',
+      url: '/api/zec/txdata',
+      data: {
+        tradeId: tradeId
+      }
+    }).then(function(data,status,jqXHR){
+        if(data.error){
+          console.log("ERROR:", data.error)
+        }else{
+          $('pre#fundTx').text(data['fund_tx']);
+
+          for(var key in data){
+            console.log(data)
+            $("#"+key).text(data[key]);
+          }
+        }
+    });
+
 
     // get address of hashlock contract
     // $.ajax({
