@@ -211,6 +211,10 @@ try{
             zcash.call('getdata', '')
                 .then(function(contract){
                    console.log("Response from getdata:", contract)
+                   var data = {};
+                   for(var key in contract){
+                     data[key] = contract[key];
+                   }
                    res.send(data);
                 }).catch(function(err){
                       res.send({

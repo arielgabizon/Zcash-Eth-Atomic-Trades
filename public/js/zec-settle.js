@@ -83,7 +83,7 @@ $(function(){
         if(data.error){
           console.log("ERROR:", data.error)
         }else{
-          $('#fundTx').text(data['fund_tx']);
+          $('pre#fundTx').text(data['fund_tx']);
 
           for(var key in data){
             console.log(data)
