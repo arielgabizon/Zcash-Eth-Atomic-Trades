@@ -3,7 +3,8 @@ var express = require('express')
 var contract = require("truffle-contract");
 var Web3 = require('web3');
 var bodyParser = require('body-parser');
-var uuidv4 = require('uuid/v4');
+//var uuidv4 = require('uuid/v4');
+var Mnemonic = require('bitcore-mnemonic');
 
 var zcash = require('./ZBXCAT/zcash');
 var addrs = require('./addrs');
@@ -65,9 +66,11 @@ app.post('/wallet', function(req, res){
  * Generates a random UUID
  */
 app.get('/api/random', function(req, res){
-    res.send({
-        random: uuidv4()
-    });
+  var code = new Mnemonic(Mnemonic.Words.ENGLISH);
+  var arr = code.toString().split(/\s/)
+  res.send({  
+      random: arr.slice(0,3).join('')
+  });
 });
 
 /**
