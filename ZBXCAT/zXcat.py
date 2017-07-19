@@ -207,11 +207,12 @@ def redeem_with_secret(contract, secret):
     # How to find redeemScript and redeemblocknum from blockchain?
     # print("Redeeming contract using secret", contract.__dict__)
     p2sh = contract['p2sh']
-    minamount = float(contract['amount'])
+    minamount = float(contract['amount']) / COIN
     #checking there are funds in the address
     amount = check_funds(p2sh)
     if(amount < minamount):
         print("address ", p2sh, " not sufficiently funded")
+        print("amount is {0} minamount is {1}".format(amount, minamount))
         return False
     print('p2sh',p2sh)
     fundtx = find_transaction_to_address(p2sh)
@@ -233,7 +234,12 @@ def redeem_with_secret(contract, secret):
 
     txin = CMutableTxIn(fundtx['outpoint'])
 
-    txout = CMutableTxOut(fundtx['amount'] - FEE, redeemPubKey.to_scriptPubKey())
+    print("fund tx amt", fundtx['amount'])
+    print("FEE", FEE)
+    txoutAmount = fundtx['amount'] - FEE
+    print("txoutAmount", txoutAmount)
+
+    txout = CMutableTxOut(txoutAmount, redeemPubKey.to_scriptPubKey())
     # Create the unsigned raw transaction.
     tx = CMutableTransaction([txin], [txout])
     sighash = SignatureHash(redeemScript, tx, 0, SIGHASH_ALL)

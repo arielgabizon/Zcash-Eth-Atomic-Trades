@@ -33,7 +33,7 @@ $(function(){
                 var preimage = $("#preimage").val();
 
                 instance.unlock(tradeId, preimage, {
-                    from: $("#redeemer").val(),
+                    from: web3.eth.defaultAccount,
                     gas: 1248090
                 },function(err,txHash){
 
@@ -48,23 +48,15 @@ $(function(){
                     }else{
                         var events = instance.allEvents();
 
-                        events.get(function(err2,log){
-
-                            for(var i = log.length-1; i >= 0; i--){
-                                // check transaction hash matches
-                                var entry = log[i];
+                        events.watch(function(err2,entry){
                                 if(entry.transactionHash == txHash){
-
                                     removeTrade(tradeId);
 
                                     $("#unlockMessage")
                                         .addClass("alert")
                                         .addClass("alert-success")
                                         .text("Successfully unlocked funds (tx: " + txHash + ")");
-
-                                    break;
                                 }
-                            }
 
                         });
 
@@ -99,7 +91,9 @@ $(function(){
         if(data.error){
           console.log("ERROR:", data.error)
         }else{
-          $('pre#fundTx').text(data['fund_tx']);
+          console.log("DATA from txdata", data);
+          $('#preimage').val(data['preimage']);
+          $('#fundTx').text(data['fund_tx']);
 
           for(var key in data){
             console.log(data)

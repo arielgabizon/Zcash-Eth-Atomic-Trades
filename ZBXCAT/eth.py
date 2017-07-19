@@ -13,8 +13,11 @@ def Zcash_generate(i):
 def Zcash_fund(data):
     contract = get_contract()
     p2sh = contract['p2sh']
-    amount = float(data['amt'])* zXcat.COIN
-    fund_txid = zXcat.zcashd.sendtoaddress(p2sh,amount)
+    # amount = float(data['amt']) / zXcat.COIN
+    print("amount to send", data['amt'])
+    # print(data['amt'], type(data['amt']))
+    fund_txid = zXcat.zcashd.sendtoaddress(p2sh,data['amt'])
+    print(fund_txid)
     contract['amount'] = data['amt']
     contract['fund_tx'] = b2x(lx(b2x(fund_txid)))
     print("fund txid:",b2x(lx(b2x(fund_txid))))
@@ -64,6 +67,7 @@ if __name__ == '__main__':
     parser.add_argument("-d", action="store", help="additional data")
     args = parser.parse_args()
     command = args.command
+    print('command', command)
     try:
         data = args.d
         data = json.loads(data)
@@ -80,6 +84,7 @@ if __name__ == '__main__':
     elif command == "getdata":
         getdata()
     elif command == "fund":
+        print("data in fund", data)
         Zcash_fund(data)
     elif command == "getsecret":
         Zcash_get_secret(tradeid)

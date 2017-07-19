@@ -68,7 +68,7 @@ app.post('/wallet', function(req, res){
 app.get('/api/random', function(req, res){
   var code = new Mnemonic(Mnemonic.Words.ENGLISH);
   var arr = code.toString().split(/\s/)
-  res.send({  
+  res.send({
       random: arr.slice(0,3).join('')
   });
 });
@@ -207,14 +207,14 @@ app.post('/api/zec/txdata', function(req, res){
         });
     }
 
-    zcash.call('getdata')
+    zcash.call('getdata', '')
         .then(function(contract){
            console.log("Response from getdata:", contract)
-           res.send({
-             redeemblocknum: contract['redeemblocknum'],
-             redeemScript: contract['redeemScript'],
-             p2sh: contract['p2sh']
-           });
+           var data = {};
+           for(var key in contract){
+             data[key] = contract[key];
+           }
+           res.send(data);
         }).catch(function(err){
               res.send({
                   error: err.toString()
@@ -228,7 +228,7 @@ app.post('/api/zec/txdata', function(req, res){
 app.post('/api/zec/tx/fund', function(req, res){
     var data = {
       p2sh: req.body.p2sh,
-      amt: req.body.amount
+      amt: req.body.amt
     }
 
     zcash.call('fund', data)
@@ -394,4 +394,4 @@ app.get('/trade/eth/settle',function(req,res){
 
 app.listen(3000,function(){
   console.log("http://localhost:3000");
-});    
+});
