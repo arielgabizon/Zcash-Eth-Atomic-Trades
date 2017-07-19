@@ -5,20 +5,7 @@ $(function(){
 
 	function onContractReady(instance){
 
-		instance.trades(tradeId,function(err,tradeData){
-            console.log(tradeData)
-            $("#sender").text(tradeData[0]);
-            $("#redeemer").text(tradeData[1]);
-            $("#senderZAddr").text(tradeData[2]);
-            $("#redeemerZAddr").text(tradeData[3]);
-            $("#hash").text(tradeData[4]);
-            $("#amount").text(tradeData[5]);
-            $("#timeoutBlock").text(tradeData[6]);
-            $("#fundTx").text(tradeData[7]);
-            $("#p2sh").text(tradeData[8]);
-            $("#redeemScript").text(tradeData[9]);
-            $("#zecAmount").text(tradeData[10]);
-        });
+		populateTradeData(instance,tradeId);
 
 		$("#signBtn").on('click',function(){
 
@@ -99,17 +86,18 @@ $(function(){
 
 
 	// get address of hashlock contract
-    $.ajax({
-        method: 'GET',
-        url: '/api/swap'
-    }).then(function(data,status,jqXHR){
+    // $.ajax({
+    //     method: 'GET',
+    //     url: '/api/swap'
+    // }).then(function(data,status,jqXHR){
 
-        var hashlockContract = web3.eth.contract(data.abi);
+    //     var hashlockContract = web3.eth.contract(data.abi);
 
-        var instance = hashlockContract.at(data.address);
+    //     var instance = hashlockContract.at(data.address);
 
-        onContractReady(instance);
+    //     onContractReady(instance);
 
-    });
+    // });
+    getContract(onContractReady);
 
 });
