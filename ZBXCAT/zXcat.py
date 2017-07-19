@@ -63,6 +63,7 @@ def make_htlc(data):
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
     contract['p2sh']=p2sh
+    zcashd.importaddress(p2sh)
     save_contract(contract)
     return contract
 

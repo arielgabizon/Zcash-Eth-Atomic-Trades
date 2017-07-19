@@ -57,6 +57,10 @@ def Zcash_new_addr(data):
 def getdata():
     return get_contract()
 
+def import_addr():
+    contract = get_contract()
+    zXcat.zcashd.importaddress(contract['p2sh'])
+
 #print("in python")
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
@@ -86,5 +90,7 @@ if __name__ == '__main__':
         Zcash_redeem(data)
     elif command  == "refund":
         Zcash_refund(tradeid, data)
+    elif command == "import":
+        import_addr()
     else:
         print("invalid choice")
