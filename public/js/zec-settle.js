@@ -43,16 +43,24 @@ $(function(){
                       preimage: preimage,
                       fundTx: fundTx,
                       p2sh: p2sh,
-                      redeemer: senderZAddr
+                      redeemer: senderZAddr,
+                      tradeId: tradeId
                     }
                 }).then(function(data,status,jqXHR){
                       if(data.error){
             						console.log("ERROR:", data.error)
             					} else {
-            						for(var key in data){
-              							console.log(data)
-              							$("#"+key).text(data[key]);
-            						}
+                          console.log("Data in redeem UI", data)
+                          console.log("Data tx", data.tx)
+              						// for(var key in data){
+                					// 		console.log(data)
+                					// 		$("#"+key).text(data[key]);
+              						// }
+
+                          $("#unlockMessage")
+                              .addClass("alert")
+                              .addClass("alert-success")
+                              .text("Successfully redeemed ZEC! (Redeem tx: " + data.tx + ")");
             					}
                 });
 
