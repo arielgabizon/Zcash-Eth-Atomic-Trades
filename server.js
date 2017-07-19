@@ -211,11 +211,7 @@ try{
             zcash.call('getdata', '')
                 .then(function(contract){
                    console.log("Response from getdata:", contract)
-                   res.send({
-                     redeemblocknum: contract['redeemblocknum'],
-                     redeemScript: contract['redeemScript'],
-                     p2sh: contract['p2sh']
-                   });
+                   res.send(data);
                 }).catch(function(err){
                       res.send({
                           error: err.toString()
