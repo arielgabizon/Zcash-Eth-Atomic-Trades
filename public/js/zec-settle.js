@@ -60,7 +60,7 @@ $(function(){
                           $("#unlockMessage")
                               .addClass("alert")
                               .addClass("alert-success")
-                              .text("Successfully redeemed ZEC! (Redeem tx: " + data.tx + ")");
+                              .text("Successfully redeemed ZEC! (Redeem tx: <a href='https://explorer.testnet.z.cash/tx/'>" + data.tx + "</a>)");
             					}
                 });
 
