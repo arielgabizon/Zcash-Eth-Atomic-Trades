@@ -10,11 +10,16 @@ Dev dependencies:
 ethereumjs-testrpc
 ```
 
+`npm install -g ethereumjs-testrpc`
+
 `npm install -g truffle`
 
 Run testrpc
 
 `testrpc`
+
+(Port 8545 needs to be free for this)
+
 
 Deploy the contracts
 
@@ -29,3 +34,7 @@ To run, serve index.js and visit it locally in your browser.
 Be sure you have the Metamask plugin installed, and have an account with some testnet ETH on rinkeby.
 
 Run the zcashd client locally, in `-testnet` mode.
+
+
+Visit
+`http://localhost:3000/`
