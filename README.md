@@ -10,7 +10,7 @@ Dev dependencies:
 ethereumjs-testrpc
 ```
 
-`npm install -g test-rpc`
+`npm install -g ethereumjs-testrpc`
 
 `npm install -g truffle`
 
