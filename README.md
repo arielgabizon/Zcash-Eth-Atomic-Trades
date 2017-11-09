@@ -11,6 +11,7 @@ ethereumjs-testrpc
 ```
 
 `npm install -g test-rpc`
+
 `npm install -g truffle`
 
 Run testrpc
