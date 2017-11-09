@@ -18,8 +18,8 @@ Run testrpc
 
 `testrpc`
 
-If port 8545 is being used run
-`testrpc -p=<other port number>`
+(Port 8545 needs to be free for this)
+
 
 Deploy the contracts
 
