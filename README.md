@@ -28,3 +28,6 @@ Deploy the contracts
 To run, serve index.js and visit it locally in your browser.
 
 `node index.js`
+
+Visit
+`http://localhost:3000/`
