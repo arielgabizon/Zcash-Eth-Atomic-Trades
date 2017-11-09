@@ -8,6 +8,7 @@ node, npm, truffle, python3, python-zcashlib
 Dev dependencies:
 ```
 ethereumjs-testrpc
+`npm install -g test-rpc`
 ```
 
 `npm install -g truffle`
@@ -15,6 +16,9 @@ ethereumjs-testrpc
 Run testrpc
 
 `testrpc`
+
+If port 8545 is being used run
+`testrpc -p=<other port number>`
 
 Deploy the contracts
 
