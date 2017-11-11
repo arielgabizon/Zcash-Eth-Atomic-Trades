@@ -17,7 +17,8 @@ $(function(){
 	$("#newAddressBtn").on('click',function(){
 		var cipherText = localStorage.getItem($("#newAddressNetwork").val());
     	var hdPrivKey = keys.decrypt(cipherText,$("#newAddressPassword").val());
-    	var tradeId = nextTradeId();
+		var tradeId = nextTradeId();
+		console.log("new trade id:", tradeId)
     	var info = keys.newPubKey(hdPrivKey,tradeId);
     	$("#newAddressMessage")
     		.addClass("alert")

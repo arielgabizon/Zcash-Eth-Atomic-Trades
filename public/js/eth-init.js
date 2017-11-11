@@ -24,7 +24,8 @@ $(function(){
             var initiator = $("#senderZAddr").val();
             var redeemer = $("#redeemerZAddr").val();
             var secret = $("#randomX").val();
-
+  //          console.log("new tradeid is:", entry.args.trade_id);
+            
             $.ajax({
                 method: 'POST',
                 url: '/api/zec/p2sh',
@@ -107,6 +108,9 @@ $(function(){
                             });
 
                             var url = encodeURI('/trade/zec/init?tradeId='+ tradeId);
+                            console.log("new tradeid is:", tradeId);  
+                            console.log("new tradeid is:", entry.args.trade_id);
+                            
                             $("#lockMessage")
                                 .addClass("alert")
                                 .addClass("alert-success")
@@ -192,7 +196,7 @@ $(function(){
         var hashlockContract = web3.eth.contract(data.abi);
 
         var instance = hashlockContract.at(data.address);
-
+        console.log("before onContratReady")
         onContractReady(instance);
 
         // default to metamask default account

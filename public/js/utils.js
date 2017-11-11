@@ -46,7 +46,7 @@ function populateTradeData(instance,tradeId){
         $("#amount").text(tradeData[5]);
         $("#timeoutBlock").text(tradeData[6]);
         $("#fundTx").text(tradeData[7]);
-        $("#p2sh").text(tradeData[8]);
+   //     $("#p2sh").text(tradeData[8]);
         $("#redeemScript").text(tradeData[9]);
         $("#zecAmount").text(tradeData[10]);
     });

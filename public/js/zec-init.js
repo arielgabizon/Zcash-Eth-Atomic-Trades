@@ -22,14 +22,16 @@ $(function(){
 						amt: $("#zecAmount").text()
 					}
 				}).then(function(data, status, jqXHR){
-					  console.log("data.tx", data.tx)
+					  //console.log("data.tx", data.tx);
 						var p2sh = $("#p2sh").text();
-						console.log("p2sh", p2sh)
-						console.log('tradeId', tradeId)
+						console.log("p2sh", p2sh);
+						console.log("data", amt);
+
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");
 
-						instance.update(tradeId, p2sh , data.tx , data.redeemScript, function(err,txHash){
+						instance.update(tradeId, p2sh , data.tx , data.redeemScript);
+/* 						, function(err,txHash){
 								if(err){
 									console.log("ERROR", err)
 										$("#lockMessage")
@@ -43,7 +45,7 @@ $(function(){
 									$("#fundSuccessMessage").removeClass("hidden");
 								}
 						});
-
+ */
 				});
 
 		});
@@ -75,9 +77,9 @@ $(function(){
 						console.log("ERROR:", data.error)
 					}else{
 						$('#zecAmount').val(data['zecAmount']);
-
+						console.log(data);
 						for(var key in data){
-							console.log(data)
+							console.log(data);
 							$("#"+key).text(data[key]);
 						}
 					}
