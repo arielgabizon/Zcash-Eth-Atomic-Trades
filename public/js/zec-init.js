@@ -22,10 +22,10 @@ $(function(){
 						amt: $("#zecAmount").text()
 					}
 				}).then(function(data, status, jqXHR){
-					  //console.log("data.tx", data.tx);
+					  	console.log("data.amt", data.amt);
 						var p2sh = $("#p2sh").text();
-						console.log("p2sh", p2sh);
-						console.log("data", amt);
+						console.log("p2sh", data.p2sh);
+						console.log("data", data);
 
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");

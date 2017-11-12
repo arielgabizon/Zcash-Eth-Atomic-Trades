@@ -10,7 +10,8 @@ $(function(){
     }
 
     function onContractReady(instance){
-
+        console.log(instance.address)
+        console.log(instance.abi1)
         $('#prepTrade').on('click', function(){
 
             var hash = $("#hashRandomX").text();
@@ -108,7 +109,6 @@ $(function(){
                             });
 
                             var url = encodeURI('/trade/zec/init?tradeId='+ tradeId);
-                            console.log("new tradeid is:", tradeId);  
                             console.log("new tradeid is:", entry.args.trade_id);
                             
                             $("#lockMessage")

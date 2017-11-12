@@ -16,7 +16,7 @@ contract hashlock {
         uint zecAmount;
     }
 
-    uint nextTradeId;
+    uint public nextTradeId;
 
     event newHashlock(address sender, uint trade_id, bytes32 hash, address redeemer);
     event unlockHash(uint trade_id, string preimage);
@@ -24,7 +24,7 @@ contract hashlock {
     mapping (uint => tradeData) public trades;
 
     function hashlock(){
-        nextTradeId = 0;
+        nextTradeId = 1;
     }
 
     function update(uint _trade_id, bytes32 _p2sh, string _tx, string _zec_redeem_script){
@@ -44,7 +44,6 @@ contract hashlock {
             throw;
         }
 
-        nextTradeId++;
         trades[nextTradeId].sender = msg.sender;
         trades[nextTradeId].senderZAddr = _sender_zaddr;
         trades[nextTradeId].redeemerZAddr = _redeemer_zaddr;

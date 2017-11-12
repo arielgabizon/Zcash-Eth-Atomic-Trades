@@ -91,7 +91,8 @@ app.post('/api/hash', function(req, res){
 });
 
 var abi = [{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"trades","outputs":[{"name":"sender","type":"address"},{"name":"redeemer","type":"address"},{"name":"senderZAddr","type":"string"},{"name":"redeemerZAddr","type":"string"},{"name":"hash","type":"bytes32"},{"name":"amount","type":"uint256"},{"name":"timeoutBlock","type":"uint256"},{"name":"zecTx","type":"string"},{"name":"zecP2SH","type":"bytes32"},{"name":"zecRedeemScript","type":"string"},{"name":"zecAmount","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"}],"name":"refund","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"},{"name":"_preimage","type":"string"}],"name":"unlock","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"},{"name":"_p2sh","type":"bytes32"},{"name":"_tx","type":"string"},{"name":"_zec_redeem_script","type":"string"}],"name":"update","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_redeemer","type":"address"},{"name":"_expires_in","type":"uint256"},{"name":"_sender_zaddr","type":"string"},{"name":"_redeemer_zaddr","type":"string"},{"name":"_zec_amount","type":"uint256"}],"name":"lock","outputs":[],"payable":true,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"hash","type":"bytes32"},{"indexed":false,"name":"redeemer","type":"address"}],"name":"newHashlock","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"preimage","type":"string"}],"name":"unlockHash","type":"event"}];
-var contractAddress = "0xe527bfe1fe3ca17f408bacb52c0a2bf3af9972bf";
+//var contractAddress = "0xe527bfe1fe3ca17f408bacb52c0a2bf3af9972bf";
+var contractAddress = "0x00566756b09478a78b4b4fdd05df72376d25e85e"
 /**
  * info about swap contract
  */
@@ -229,6 +230,7 @@ app.post('/api/zec/tx/fund', function(req, res){
     var data = {
       p2sh: req.body.p2sh,
       amt: req.body.amt
+      //fund_tx: req.body.fund_tx
     }
 
     zcash.call('fund', data)
