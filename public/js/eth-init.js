@@ -11,7 +11,7 @@ $(function(){
 
     function onContractReady(instance){
         console.log(instance.address)
-        console.log(instance.abi1)
+        console.log(instance.abi)
         $('#prepTrade').on('click', function(){
 
             var hash = $("#hashRandomX").text();

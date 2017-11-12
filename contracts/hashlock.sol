@@ -24,7 +24,7 @@ contract hashlock {
     mapping (uint => tradeData) public trades;
 
     function hashlock(){
-        nextTradeId = 1;
+        nextTradeId = 1;//set to constant one for simplcity; should be incremented with each trade
     }
 
     function update(uint _trade_id, bytes32 _p2sh, string _tx, string _zec_redeem_script){
@@ -66,7 +66,7 @@ contract hashlock {
             /* can only withdraw before block timeout */
             throw;
         }
-        trades[_trade_id].redeemer.transfer(trades[_trade_id].amount);
+        trades[_trade_id].redeemer.transfer(trades[_trade_id].amount/2); //dividing by half to leave room for fee (over kill)
         unlockHash(_trade_id, _preimage);
     }
 

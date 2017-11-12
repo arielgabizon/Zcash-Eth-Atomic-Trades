@@ -4,7 +4,9 @@ $(function(){
 	var tradeId = m[1];
 
 	function onContractReady(instance){
-
+		console.log("trade 1")
+		instance.trades(tradeId,function(err,data){console.log(data);})
+		
 		populateTradeData(instance,tradeId);
 
 		$("#signBtn").on('click',function(){
@@ -30,8 +32,7 @@ $(function(){
 						$("#fundSuccessMessage").addClass("hidden");
 						$("#txHash").text("");
 
-						instance.update(tradeId, p2sh , data.tx , data.redeemScript);
-/* 						, function(err,txHash){
+						instance.update(tradeId, p2sh , data.tx , data.redeemScript, function(err,txHash){
 								if(err){
 									console.log("ERROR", err)
 										$("#lockMessage")
@@ -45,7 +46,6 @@ $(function(){
 									$("#fundSuccessMessage").removeClass("hidden");
 								}
 						});
- */
 				});
 
 		});

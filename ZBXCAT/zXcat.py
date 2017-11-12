@@ -20,7 +20,7 @@ from utils import *
 SelectParams('testnet')
 # SelectParams('regtest')
 zcashd = zcash.rpc.Proxy()
-FEE = 0.001*COIN
+FEE = 0.0001*COIN
 
 
 def get_keys(funder_address, redeemer_address):
