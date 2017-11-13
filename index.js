@@ -93,8 +93,8 @@ app.post('/api/hash', function(req, res){
 var abi = [{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"trades","outputs":[{"name":"sender","type":"address"},{"name":"redeemer","type":"address"},{"name":"senderZAddr","type":"string"},{"name":"redeemerZAddr","type":"string"},{"name":"hash","type":"bytes32"},{"name":"amount","type":"uint256"},{"name":"timeoutBlock","type":"uint256"},{"name":"zecTx","type":"string"},{"name":"zecP2SH","type":"bytes32"},{"name":"zecRedeemScript","type":"string"},{"name":"zecAmount","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"}],"name":"refund","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"},{"name":"_preimage","type":"string"}],"name":"unlock","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_trade_id","type":"uint256"},{"name":"_p2sh","type":"bytes32"},{"name":"_tx","type":"string"},{"name":"_zec_redeem_script","type":"string"}],"name":"update","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_hash","type":"bytes32"},{"name":"_redeemer","type":"address"},{"name":"_expires_in","type":"uint256"},{"name":"_sender_zaddr","type":"string"},{"name":"_redeemer_zaddr","type":"string"},{"name":"_zec_amount","type":"uint256"}],"name":"lock","outputs":[],"payable":true,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"sender","type":"address"},{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"hash","type":"bytes32"},{"indexed":false,"name":"redeemer","type":"address"}],"name":"newHashlock","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"trade_id","type":"uint256"},{"indexed":false,"name":"preimage","type":"string"}],"name":"unlockHash","type":"event"}];
 //var contractAddress = "0xe527bfe1fe3ca17f408bacb52c0a2bf3af9972bf";
 //var contractAddress = "0x00566756b09478a78b4b4fdd05df72376d25e85e"
-//var contractAddress = "0x87F2F2E21682230433097341b5d5007d8dC2d488" - rinkeby
-var contractAddress = "0x197701128c7743106f8f6510b2d3a7c1e9219acd"
+var contractAddress = "0x87F2F2E21682230433097341b5d5007d8dC2d488" //- rinkeby
+//var contractAddress = "0x5d86ac6726f871b738d3a5f56b50d3e334504440"
 /**
  * info about swap contract
  */
@@ -105,64 +105,6 @@ app.get('/api/swap', function (req, res) {
     });
 });
 
-/**
- * Get Swap info
- */
-/*app.get('/api/swap/get/:id', function(req, res){
-
-    if(!req.params.id){
-        res.send({
-            error: "Invalid parameters"
-        });
-    }
-    // else if(/^0x/.test(req.params.id)){
-    //     // id is a transaction hash
-    //     var txId = req.params.id;
-    //     web3.eth.getTransactionReceipt(txId,function(err,result){
-    //         if(err == null || result == null){
-    //             res.send({
-    //                 error: "tx: " + txId + " was not found."
-    //             });
-    //         }
-    //         else if(err){
-    //             res.send({
-    //                 error: err.toString()
-    //             });
-    //         }else{
-    //             // TODO: get trade id
-    //             getTrade(txId,res);
-    //         }
-    //     });
-    // }
-    else if(/\d+/.test(req.params.id)){
-        // id is the trade id
-        var hashlockContract = web3.eth.contract(abi);
-        var instance = hashlockContract.at(contractAddress);
-        var tradeId = req.params.id;
-        instance.trades(tradeId,function(err,tradeData){
-            console.log(tradeData)
-            res.send({
-                id: tradeId,
-                sender: tradeData[0],
-                redeemer: tradeData[1],
-                senderZAddr: tradeData[2],
-                redeemerZAddr: tradeData[3],
-                hash: tradeData[4],
-                amount: tradeData[5],
-                timeoutBlock: tradeData[6],
-                fundTx: tradeData[7],
-                p2sh: tradeData[8],
-                redeemScript: tradeData[9],
-                zecAmount: tradeData[10]
-            });
-        });
-    }else{
-        res.send({
-            error: "Invalid parameters"
-        });
-    }
-
-});*/
 
 /**
  * Gets just the zcash redeemscript/p2sh
@@ -311,51 +253,6 @@ app.post('/api/zec/address', function(req, res){
     });
 })
 
-/**
- * Creates a "hash lock ETH contract" between Alice and Bob
- */
-/*app.post('/api/eth/lock', function(req, res){
-    var hash = req.body.hash;
-    var redeemer = req.body.redeemer;
-    var sender = req.body.sender;
-    var senderZAddr = req.body.senderZAddr;
-    var redeemerZAddr = req.body.redeemerZAddr;
-    var expiry = req.body.expiry;
-    var amount = req.body.amount;
-    instance.lock(hash, redeemer, expiry, senderZAddr, redeemerZAddr, {
-        from: sender,
-        value: amount,
-        gas: 1248090
-    }).then(function(result){
-        res.send({
-            tradeId: result.logs[0].args.trade_id,
-            tx: result.tx
-        });
-    }).catch(function(err){
-        res.send({
-            error: err.toString()
-        });
-    });
-});*/
-
-/*app.post('/api/eth/unlock', function(req, res){
-    var tradeId = req.body.tradeId;
-    var preimage = req.body.preimage;
-    var redeemer = req.body.redeemer;
-    // can the redeemer be just the address, or must be accessed through web3?
-    instance.unlock(tradeId, preimage, {
-        from: redeemer,
-        gas: 1248090
-    }).then(function(result){
-        res.send({
-            tx: result.tx
-        });
-    }).catch(function(err){
-        res.send({
-            error: err.toString()
-        });
-    });
-});*/
 
 /*****************************************************************
  * pages
