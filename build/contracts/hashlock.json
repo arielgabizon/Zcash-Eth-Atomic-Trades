@@ -568,8 +568,59 @@
       "links": {},
       "address": "0x197701128c7743106f8f6510b2d3a7c1e9219acd",
       "updated_at": 1510503153778
+    },
+    "1510542759456": {
+      "events": {
+        "0x054da37c6341ee7ffb28fa7735d7a41be2c26847322894c16a774062a63536a8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "trade_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "hash",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "redeemer",
+              "type": "address"
+            }
+          ],
+          "name": "newHashlock",
+          "type": "event"
+        },
+        "0x7ce2391c3064a4cf05eadd0bd88ef3b40a0129fa80e2dcddc57e0ed12ebd5628": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "trade_id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "preimage",
+              "type": "string"
+            }
+          ],
+          "name": "unlockHash",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x4cb252f926339245c5e72de3fc460a89f112ed86",
+      "updated_at": 1510542924310
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1510503153778
+  "updated_at": 1510542924310
 }
