@@ -17,10 +17,19 @@ from zcash.core.scripteval import VerifyScript, SCRIPT_VERIFY_P2SH
 from zcash.wallet import CBitcoinAddress, CBitcoinSecret, P2SHBitcoinAddress, P2PKHBitcoinAddress
 from utils import *
 
-# SelectParams('testnet')
-SelectParams('regtest')
+# TODO: Tim see testnet -- link to zcashd -daemon -testnet
+# TODO: get zcash testnet facuet
+# TODO: https://faucet.testnet.z.cash/
+SelectParams('testnet')
+# SelectParams('regtest')
+
+# TODO: Tim see zcash.rpc.Proxy for interfacing with the zcash client
 zcashd = zcash.rpc.Proxy()
 FEE = 0.001*COIN
+
+
+# TODO: https://chat.zcashcommunity.com/home
+# TODO: #alchemy channel
 
 
 def get_keys(funder_address, redeemer_address):
@@ -65,6 +74,7 @@ def make_htlc(data):
     contract['p2sh']=p2sh
     zcashd.importaddress(p2sh)
     save_contract(contract)
+    zcashd.importaddress(p2sh, "", False)
     return contract
 
 def fund_htlc(p2sh, amount):
@@ -88,6 +98,7 @@ def get_tx_details(txid):
 
 def find_transaction_to_address(p2sh):
     zcashd.importaddress(p2sh, "", False)
+    print('p2sh', p2sh, type(p2sh))
     txs = zcashd.listunspent()
     for tx in txs:
         if tx['address'] == CBitcoinAddress(p2sh):
@@ -186,29 +197,40 @@ def new_zcash_addr():
     addr = zcashd.getnewaddress()
     return addr
 
-# redeems funded tx automatically, by scanning for transaction to the p2sh
-# i.e., doesn't require buyer telling us fund txid
-# returns false if fund tx doesn't exist or is too small
-def redeem_with_secret(contract, secret):
-    # How to find redeemScript and redeemblocknum from blockchain?
-    # print("Redeeming contract using secret", contract.__dict__)
-    p2sh = contract['p2sh']
-    minamount = float(contract['amount'])
+def generate(num):
+    blocks = zcashd.generate(num)
+    return blocks
+
+def find_outpoint(txid, p2sh):
+    p2sh = str(p2sh)
+    raw = zcashd.gettransaction(lx(txid))['hex']
+    decoded = zcashd.decoderawtransaction(raw)
+    vouts = decoded['vout']
+    for vout in vouts:
+        if p2sh == str(vout['scriptPubKey']['addresses'][0]):
+            return vout
+
+    minamount = float(contract['amount']) / COIN
     #checking there are funds in the address
     amount = check_funds(p2sh)
     if(amount < minamount):
         print("address ", p2sh, " not sufficiently funded")
+        print("amount is {0} minamount is {1}".format(amount, minamount))
         return False
+    print('p2sh',p2sh)
     fundtx = find_transaction_to_address(p2sh)
-    amount = fundtx['amount'] / COIN
+    print('fundtx',fundtx)
+    amount = int(contract['amount']) / COIN
     p2sh = P2SHBitcoinAddress(p2sh)
-    if fundtx['address'] == p2sh:
-        print("Found {0} in p2sh {1}, redeeming...".format(amount, p2sh))
 
-        redeemPubKey = find_redeemAddr(contract)
-        print('redeemPubKey', redeemPubKey)
+    # if fundtx['address'] == p2sh:
+    print("Found {0} in p2sh {1}, redeeming...".format(amount, p2sh))
 
-        redeemScript = CScript(x(contract['redeemScript']))
+    redeemPubKey = find_redeemAddr(contract)
+    print('redeemPubKey', redeemPubKey)
+
+    redeemScript = CScript(x(contract['redeemScript']))
+        
         txin = CMutableTxIn(fundtx['outpoint'])
         txout = CMutableTxOut(fundtx['amount'] - FEE, redeemPubKey.to_scriptPubKey())
         # Create the unsigned raw transaction.
@@ -232,6 +254,37 @@ def redeem_with_secret(contract, secret):
     else:
         print("No contract for this p2sh found in database", p2sh)
 
+    # vout = find_outpoint(contract['fund_tx'], p2sh)
+    # print("vout", vout)
+    # txin = CMutableTxIn(vout)
+    # print("TXIN parsed from vouts", txin)
+
+    txin = CMutableTxIn(fundtx['outpoint'])
+
+    print("fund tx amt", fundtx['amount'])
+    print("FEE", FEE)
+    txoutAmount = fundtx['amount'] - FEE
+    print("txoutAmount", txoutAmount)
+
+    txout = CMutableTxOut(txoutAmount, redeemPubKey.to_scriptPubKey())
+    # Create the unsigned raw transaction.
+    tx = CMutableTransaction([txin], [txout])
+    sighash = SignatureHash(redeemScript, tx, 0, SIGHASH_ALL)
+    # TODO: figure out how to better protect privkey
+    privkey = zcashd.dumpprivkey(redeemPubKey)
+    sig = privkey.sign(sighash) + bytes([SIGHASH_ALL])
+    print("SECRET", secret)
+    # secret = get_secret()
+    preimage = secret.encode('utf-8')
+    txin.scriptSig = CScript([sig, privkey.pub, preimage, OP_TRUE, redeemScript])
+    # print("txin.scriptSig", b2x(txin.scriptSig))
+    txin_scriptPubKey = redeemScript.to_p2sh_scriptPubKey()
+    # print('Redeem txhex', b2x(tx.serialize()))
+    VerifyScript(txin.scriptSig, txin_scriptPubKey, tx, 0, (SCRIPT_VERIFY_P2SH,))
+    print("script verified, sending raw tx")
+    txid = zcashd.sendrawtransaction(tx)
+    print("Txid of submitted redeem tx: ", b2x(lx(b2x(txid))))
+    return  b2x(lx(b2x(txid)))
 
 
 # given a contract return true or false according to whether the relevant fund tx's timelock is still valid

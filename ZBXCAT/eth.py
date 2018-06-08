@@ -13,8 +13,11 @@ def Zcash_generate(i):
 def Zcash_fund(data):
     contract = get_contract()
     p2sh = contract['p2sh']
-    amount = float(data['amt'])* zXcat.COIN
-    fund_txid = zXcat.zcashd.sendtoaddress(p2sh,amount)
+    # amount = float(data['amt']) / zXcat.COIN
+    print("amount to send", data['amt'])
+    # print(data['amt'], type(data['amt']))
+    fund_txid = zXcat.zcashd.sendtoaddress(p2sh,data['amt'])
+    print(fund_txid)
     contract['amount'] = data['amt']
     contract['fund_tx'] = b2x(lx(b2x(fund_txid)))
     print("fund txid:",b2x(lx(b2x(fund_txid))))
@@ -22,8 +25,8 @@ def Zcash_fund(data):
     return contract
 
 # finds seller's redeem tx and gets secret from it
-def Zcash_get_secret(tradeid):
-    contract = get_contract(tradeid)
+def Zcash_get_secret():
+    contract = get_contract()
     print("In Zcash_get_secret python")
     secret = zXcat.find_secret(contract['p2sh'], contract['fund_tx'])
     print("secret found is", secret)
@@ -68,22 +71,26 @@ if __name__ == '__main__':
     parser.add_argument("-d", action="store", help="additional data")
     args = parser.parse_args()
     command = args.command
-    if args.d:
+    print('command', command)
+    try:
         data = args.d
         data = json.loads(data)
-        if 'tradeid' in data:
-            tradeid = data['tradeid']
         print("Data in eth.py", data)
-
+        if 'tradeid' in data:
+            tradeid = args.tradeid
+    except:
+        print("args.d not defined", args.d)
+        pass
     if command == "make":
         zXcat.make_htlc(data)
         quit()
     elif command == "getdata":
         getdata()
     elif command == "fund":
+        print("data in fund", data)
         Zcash_fund(data)
     elif command == "getsecret":
-        Zcash_get_secret(tradeid)
+        Zcash_get_secret()
     elif command == "getaddr":
         Zcash_new_addr(data)
     elif command == "redeem":
