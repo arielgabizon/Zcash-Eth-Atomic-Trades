@@ -23,7 +23,7 @@ from utils import *
 SelectParams('testnet')
 # SelectParams('regtest')
 
-# TODO: Tim see proxy
+# TODO: Tim see zcash.rpc.Proxy for interfacing with the zcash client
 zcashd = zcash.rpc.Proxy()
 FEE = 0.001*COIN
 

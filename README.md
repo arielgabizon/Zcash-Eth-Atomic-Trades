@@ -1,33 +1,45 @@
 # Atomic trades for ZEC <-> ETH
 
-Dependencies:
-```
-node, npm, truffle, python3, python-zcashlib
-```
+## Swap Initialize Example
+![swap init example](swap.png)
 
-Dev dependencies:
+## Dependencies:
 ```
-ethereumjs-testrpc
+node, npm, truffle, python3, python-zcashlib, infura
 ```
 
-`npm install -g ethereumjs-testrpc`
+## Install Dev dependencies:
+```
+npm install
+```
 
-`npm install -g truffle`
+## Deploy the contracts to infura rinkeby test network
 
-Run testrpc
+`truffle migrate --network infurarinkeby`
 
-`testrpc`
+After you deploy the contract, get the hashlock contract address and update it in `server.js` 
 
-(Port 8545 needs to be free for this)
-
-
-Deploy the contracts
-
-`truffle deploy`
-
-To run, serve index.js and visit it locally in your browser.
+## To run, serve index.js and visit it locally in your browser.
 
 `node index.js`
+
+Visit
+`http://localhost:3000/`
+
+## macbook zcash client
+
+Download and install the [zcash macbook client](https://github.com/kozyilmaz/zcash-apple)
+
+
+### zcash test network
+
+-- todo
+
+
+## to do
+* update `ZBXCAT/zXcat.py` with testnet link to zcashd -daemon -testnet
+* get test zcash into wallet from [zcash faucet](https://faucet.testnet.z.cash/) 
+* see zcash.rpc.Proxy for interfacing with the zcash client
 
 ## To test:
 
@@ -36,5 +48,6 @@ Be sure you have the Metamask plugin installed, and have an account with some te
 Run the zcashd client locally, in `-testnet` mode.
 
 
-Visit
-`http://localhost:3000/`
+## community support
+Chat with us on [zcash rocketchat alachemy](https://chat.zcashcommunity.com/channel/alchemy)
+or on gitter [buidldao]()
