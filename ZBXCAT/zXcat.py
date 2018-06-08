@@ -17,10 +17,19 @@ from zcash.core.scripteval import VerifyScript, SCRIPT_VERIFY_P2SH
 from zcash.wallet import CBitcoinAddress, CBitcoinSecret, P2SHBitcoinAddress, P2PKHBitcoinAddress
 from utils import *
 
+# TODO: Tim see testnet -- link to zcashd -daemon -testnet
+# TODO: get zcash testnet facuet
+# TODO: https://faucet.testnet.z.cash/
 SelectParams('testnet')
 # SelectParams('regtest')
+
+# TODO: Tim see proxy
 zcashd = zcash.rpc.Proxy()
 FEE = 0.001*COIN
+
+
+# TODO: https://chat.zcashcommunity.com/home
+# TODO: #alchemy channel
 
 
 def get_keys(funder_address, redeemer_address):
