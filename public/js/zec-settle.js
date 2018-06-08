@@ -77,8 +77,20 @@ $(function(){
         for(var key in data){
             $("#"+key).text(data[key]);
         }
+        $.ajax({
+          method: 'POST',
+          url: '/api/zec/txdata',
+          data: {
+  					tradeId: tradeId
+  				}
+        }).then(function(data, status,jqXHR){
+            console.log("Data from txdata", data)
+            $('#fundTx').text(data.fund_tx);
+            $('#p2sh').text(data.p2sh);
+            $('#redeemblocknum').text(data.redeemblocknum);
+        })
+    })
 
-    });
 
     // get data for ZEC
     $.ajax({

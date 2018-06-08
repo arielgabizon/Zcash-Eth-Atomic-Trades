@@ -72,6 +72,7 @@ def make_htlc(data):
     contract['redeemblocknum']=redeemblocknum
     contract['redeemScript']= b2x(zec_redeemScript)
     contract['p2sh']=p2sh
+    zcashd.importaddress(p2sh)
     save_contract(contract)
     zcashd.importaddress(p2sh, "", False)
     return contract
@@ -209,13 +210,6 @@ def find_outpoint(txid, p2sh):
         if p2sh == str(vout['scriptPubKey']['addresses'][0]):
             return vout
 
-# redeems funded tx automatically, by scanning for transaction to the p2sh
-# i.e., doesn't require buyer telling us fund txid
-# returns false if fund tx doesn't exist or is too small
-def redeem_with_secret(contract, secret):
-    # How to find redeemScript and redeemblocknum from blockchain?
-    # print("Redeeming contract using secret", contract.__dict__)
-    p2sh = contract['p2sh']
     minamount = float(contract['amount']) / COIN
     #checking there are funds in the address
     amount = check_funds(p2sh)
@@ -228,6 +222,7 @@ def redeem_with_secret(contract, secret):
     print('fundtx',fundtx)
     amount = int(contract['amount']) / COIN
     p2sh = P2SHBitcoinAddress(p2sh)
+
     # if fundtx['address'] == p2sh:
     print("Found {0} in p2sh {1}, redeeming...".format(amount, p2sh))
 
@@ -235,6 +230,29 @@ def redeem_with_secret(contract, secret):
     print('redeemPubKey', redeemPubKey)
 
     redeemScript = CScript(x(contract['redeemScript']))
+        
+        txin = CMutableTxIn(fundtx['outpoint'])
+        txout = CMutableTxOut(fundtx['amount'] - FEE, redeemPubKey.to_scriptPubKey())
+        # Create the unsigned raw transaction.
+        tx = CMutableTransaction([txin], [txout])
+        sighash = SignatureHash(redeemScript, tx, 0, SIGHASH_ALL)
+        # TODO: figure out how to better protect privkey
+        privkey = zcashd.dumpprivkey(redeemPubKey)
+        sig = privkey.sign(sighash) + bytes([SIGHASH_ALL])
+        print("SECRET", secret)
+        # secret = get_secret()
+        preimage = secret.encode('utf-8')
+        txin.scriptSig = CScript([sig, privkey.pub, preimage, OP_TRUE, redeemScript])
+        # print("txin.scriptSig", b2x(txin.scriptSig))
+        txin_scriptPubKey = redeemScript.to_p2sh_scriptPubKey()
+        # print('Redeem txhex', b2x(tx.serialize()))
+        VerifyScript(txin.scriptSig, txin_scriptPubKey, tx, 0, (SCRIPT_VERIFY_P2SH,))
+        print("script verified, sending raw tx")
+        txid = zcashd.sendrawtransaction(tx)
+        print("Txid of submitted redeem tx: ", b2x(lx(b2x(txid))))
+        return  b2x(lx(b2x(txid)))
+    else:
+        print("No contract for this p2sh found in database", p2sh)
 
     # vout = find_outpoint(contract['fund_tx'], p2sh)
     # print("vout", vout)

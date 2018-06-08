@@ -12,6 +12,7 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",
+    "ethereumjs-testrpc": "^6.0.3",
     "express": "^4.15.3",
     "promise": "^8.0.1",
     "request": "^2.81.0",

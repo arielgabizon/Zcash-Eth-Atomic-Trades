@@ -51,7 +51,7 @@ def Zcash_redeem(data):
     save_contract(contract)
     return txid
 
-def new_addr(data):
+def Zcash_new_addr(data):
     contract = {}
     addr = zXcat.new_zcash_addr()
     contract[data['role']] = str(addr)
@@ -59,6 +59,10 @@ def new_addr(data):
 
 def getdata():
     return get_contract()
+
+def import_addr():
+    contract = get_contract()
+    zXcat.zcashd.importaddress(contract['p2sh'])
 
 #print("in python")
 if __name__ == '__main__':
@@ -77,7 +81,6 @@ if __name__ == '__main__':
     except:
         print("args.d not defined", args.d)
         pass
-
     if command == "make":
         zXcat.make_htlc(data)
         quit()
@@ -89,10 +92,12 @@ if __name__ == '__main__':
     elif command == "getsecret":
         Zcash_get_secret()
     elif command == "getaddr":
-        new_addr(data)
+        Zcash_new_addr(data)
     elif command == "redeem":
         Zcash_redeem(data)
     elif command  == "refund":
         Zcash_refund(tradeid, data)
+    elif command == "import":
+        import_addr()
     else:
         print("invalid choice")

@@ -49,5 +49,6 @@ Run the zcashd client locally, in `-testnet` mode.
 
 
 ## community support
-Chat with us on [zcash rocketchat alachemy](https://chat.zcashcommunity.com/channel/alchemy)
-or on gitter [buidldao]()
+Chat with us on RocketChat at [zcash/alachemy](https://chat.zcashcommunity.com/channel/alchemy)
+or on Gitter at [buidldao/Zcash-Eth-Atomic-Trades](https://gitter.im/buidldao/Zcash-Eth-Atomic-Trades)
+
