@@ -208,7 +208,7 @@ try{
                 });
             }
 
-            zcash.call('getdata')
+            zcash.call('getdata', '')
                 .then(function(contract){
                    console.log("Response from getdata:", contract)
                    var data = {};
@@ -278,7 +278,7 @@ try{
          * Submits Bob's refund transaction
          */
         app.post('/api/zec/tx/refund', function(req, res){
-          zcash.call('refund')
+          zcash.call('refund', '')
             .then(function(contract){
                 console.log("Contract returning from refund call", contract)
                 console.log("Redeem txid returning from call", contract['refund_tx'])

@@ -5,6 +5,7 @@ $(function(){
 
 	function onContractReady(instance){
 
+		populateTradeData(instance,tradeId);
 
 		$("#signBtn").on('click',function(){
 
@@ -18,7 +19,7 @@ $(function(){
 					url: '/api/zec/tx/fund',
 					data: {
 						p2sh: p2sh,
-						amount: $("#zecAmount").text()
+						amt: $("#zecAmount").text()
 					}
 				}).then(function(data, status, jqXHR){
 					  console.log("data.tx", data.tx)
@@ -48,19 +49,19 @@ $(function(){
 		});
 
 		// get trade info from Ethereum contract
-			$.ajax({
-				method: 'GET',
-				url: '/api/swap/get/' + tradeId
-			}).then(function(data,status,jqXHR){
-					if(data.error){
-						console.log("ERROR:", data.error)
-					}else{
-						for(var key in data){
-							console.log(data)
-							$("#"+key).text(data[key]);
-						}
-					}
-			})
+			// $.ajax({
+			// 	method: 'GET',
+			// 	url: '/api/swap/get/' + tradeId
+			// }).then(function(data,status,jqXHR){
+			// 		if(data.error){
+			// 			console.log("ERROR:", data.error)
+			// 		}else{
+			// 			for(var key in data){
+			// 				console.log(data)
+			// 				$("#"+key).text(data[key]);
+			// 			}
+			// 		}
+			// })
 
 			// get data for funding transaction (ZEC)
 			$.ajax({
@@ -85,17 +86,18 @@ $(function(){
 
 
 	// get address of hashlock contract
-    $.ajax({
-        method: 'GET',
-        url: '/api/swap'
-    }).then(function(data,status,jqXHR){
+    // $.ajax({
+    //     method: 'GET',
+    //     url: '/api/swap'
+    // }).then(function(data,status,jqXHR){
 
-        var hashlockContract = web3.eth.contract(data.abi);
+    //     var hashlockContract = web3.eth.contract(data.abi);
 
-        var instance = hashlockContract.at(data.address);
+    //     var instance = hashlockContract.at(data.address);
 
-        onContractReady(instance);
+    //     onContractReady(instance);
 
-    });
+    // });
+    getContract(onContractReady);
 
 });

@@ -12,15 +12,18 @@
     "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "ejs": "^2.5.6",
+    "ethereumjs-testrpc": "^6.0.3",
     "express": "^4.15.3",
     "promise": "^8.0.1",
     "request": "^2.81.0",
     "truffle-contract": "^2.0.1",
+    "truffle-hdwallet-provider": "0.0.5",
     "uuid": "^3.1.0",
     "web3": "^0.19.1"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
