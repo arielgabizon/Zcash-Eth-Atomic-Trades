@@ -4,3 +4,4 @@ ZBXCAT/__pycache__
 *.pyc
 ZBXCAT/secret.json
 ZBXCAT/contract.json
+build/

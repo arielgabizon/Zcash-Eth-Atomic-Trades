@@ -118,7 +118,7 @@ $(function(){
                     });
 
                 }
-                //$("#lockBtn").removeAttr("disabled");
+                $("#lockBtn").removeAttr("disabled");
             });
 
         });

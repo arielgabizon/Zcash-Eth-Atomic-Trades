@@ -13,15 +13,36 @@ node, npm, truffle, python3, python-zcashlib, infura
 npm install
 ```
 
-## Deploy the contracts to infura rinkeby test network
+## Deploy the contracts to paritys kovan test network
+`truffle compile`
+truffle migrate --reset --compile-all --network="kovan"
+```truffle deploy --network="kovan"```
 
-`truffle migrate --network infurarinkeby`
+then open up the [parity-js shell ui electron app](https://github.com/parity-js/shell/releases/tag/v0.1.4), edit the 
+gas amount to `2000000` and enter your account password, should get 
+something like this:
+``` 
+Using network 'kovan'.
 
-After you deploy the contract, get the hashlock contract address and update it in `server.js` 
+Running migration: 2_deploy_contracts.js
+  Deploying hashlock...
+  ... 0x43de5163939f7720edb1013becf93667792722f9d11fea416f28510839b9b204
+  hashlock: 0xee93953861f133aaad02dd887da7ba8b35da6edb
+Saving successful migration to network...
+  ... 0x4f4014529b2ee55a96379f5119a6cd3d3d44afae2720e482596b0aea873d099b
+Saving artifacts...
+
+
+```
+
+Grab the contract address above `0xee93953861f133aaad02dd887da7ba8b35da6edb` and confirm it was deployed on 
+[ether scan kovan network](https://kovan.etherscan.io/address/0xee93953861f133aaad02dd887da7ba8b35da6edb)
+
+After you deploy the contract, get the hashlock contract address and update it in `index.js` 
 
 ## To run, serve index.js and visit it locally in your browser.
 
-`node index.js`
+`node index.js` or `npm run start`
 
 Visit
 `http://localhost:3000/`
